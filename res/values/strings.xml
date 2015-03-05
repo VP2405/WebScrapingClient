@@ -1,8 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">WebScrapingClientAndroid</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">WebScrapingClient</string>
     <string name="action_settings">Settings</string>
+    
+    
+    <!-- MainActivity -->
+    <string name="title">Scorci d\'Italia</string>
+    <string name="subtitle">Hotels and Restaurants</string>
+    
+    <string name="profiles_title">Choose Profile</string>
+    
+    <string name="radio1">Profile 1</string>
+    <string name="radio2">Profile 2</string>
+    <string name="radio3">Profile 3</string>
+    
+    <string name="poi_title">Choose Typology of PoI</string>
+    
+    <string name="hotels">Hotels</string>
+    <string name="restaurants">Restaurants</string>
+    
+    <string name="search_city">Search City</string>
+    <string name="city_hint">City</string>
+    
+    <string name="button">Search</string>
+    
+    <!-- PoiList -->
+    <string name="name">Name</string>
+    <string name="details">Details</string>
+    
+    
+    
+    
+    <!-- Details -->
+    <string name="name_poi">Name</string>
+    <string name="address">Address</string>
+    <string name="zipcode">zipcode</string>
+    <string name="city">City</string>
+    
+    <string name="contacts">Contacts</string>
+    <string name="website">WebSite</string>
+    <string name="email">Email</string>
+    <string name="reviews">Reviews</string>
+    <string name="rating">Rating</string>
+    <string name="times">Opening times</string>
+    <string name="avg_price">Average Price</string>
+    
+    <string name="detailsRating">Details</string>
+    <string name="services">Services</string>
+    <string name="policies">Policies</string>
+    <string name="cuisines_list">Cuisines</string>
+    
+    
+    
+    
 
 </resources>
