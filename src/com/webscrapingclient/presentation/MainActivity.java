@@ -1,7 +1,5 @@
 package com.webscrapingclient.presentation;
 
-import java.text.ChoiceFormat;
-
 import com.example.webscrapingclientandroid.R;
 
 import android.app.Activity;
