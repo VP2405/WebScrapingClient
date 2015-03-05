@@ -1,6 +1,8 @@
-package com.example.webscrapingclientandroid;
+package com.webscrapingclient.presentation;
 
 import java.text.ChoiceFormat;
+
+import com.example.webscrapingclientandroid.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,7 +19,7 @@ public class MainActivity extends Activity {
 	
 	private RadioButton rbProfile1, rbProfile2, rbProfile3, rbHotels, rbRestaurants;
 	private Button startButton;
-	public boolean hotel_chosen = false;
+	private boolean hotel_chosen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +75,11 @@ public class MainActivity extends Activity {
 				{
 					hotel_chosen = true;
 				}
-				else if(rbRestaurants.isSelected())
-				{
-					
-				}
 				
 				
 				//passa all'activity contenente la lista dei poi filtrati
-				Intent intent = new Intent(MainActivity.this, PoiList.class);
+				Intent intent = new Intent(MainActivity.this, PoiDetailsActivity.class);
+				intent.putExtra("typeChoice", hotel_chosen);
 				startActivity(intent);
 				finish();
 				
