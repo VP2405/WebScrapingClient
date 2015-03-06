@@ -51,7 +51,10 @@ public class SplashScreenActivity extends Activity
 	        }, TIME_OUT);
 	        
 	        
-	        //terminati i 3 secondi richiama i servizi per ottenere la lista dei profili
+	        /*
+	         * terminati i 3 secondi richiama i servizi REST per ottenere la lista dei profili
+	         * mostrando per tutto il tempo di recupero dei dati una progress dialog
+	         */
 	     final ProgressDialog progress = new ProgressDialog(SplashScreenActivity.this);
    		 progress.requestWindowFeature(Window.FEATURE_PROGRESS);
    		 progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -59,7 +62,7 @@ public class SplashScreenActivity extends Activity
    		 progress.setContentView(R.layout.custom_pd);
    		 progress.setTitle(null);
    		 TextView text = (TextView) progress.findViewById(R.id.progress_msg);
-   		 text.setText("Recupero dati..");
+   		 text.setText("Recupero profili in corso..");
    		 progress.setIndeterminate(true);
    		 progress.setCancelable(false);
 
