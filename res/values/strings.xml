@@ -46,13 +46,13 @@
     <string name="times">Opening times</string>
     <string name="avg_price">Average Price</string>
     <string name="stars">Stars</string>
-    <string name="detailsRating">Details</string>
+    <string name="detailsRating">Rating Details</string>
     <string name="services">Services</string>
     <string name="policies">Policies</string>
     <string name="cuisines_list">Cuisines</string>
     
     <string name="close">Close</string>
-    
+    <string name="next">Next ></string>
     
     
 

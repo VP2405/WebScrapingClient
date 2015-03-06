@@ -1,4 +1,4 @@
-<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -6,33 +6,21 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    android:background="@drawable/flag"
     tools:context="com.example.webscrapingclient.MainActivity" xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="100dp"
+        android:layout_height="180dp"
+        android:contentDescription="relative"
+        android:src="@drawable/flag" />
 
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="80sp"
-        android:text="@string/title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        
-        android:text="@string/subtitle"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="302dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:layout_marginTop="150dp"
+        android:layout_below="@+id/imageView1"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -42,11 +30,11 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:textSize="25sp"
         android:layout_gravity="left"
-        
-        android:text="@string/profiles_title" />
+        android:layout_marginTop="20dp"
+        android:text="@string/profiles_title"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <RadioButton
         android:id="@+id/radioButton1"
@@ -54,7 +42,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="20sp"
+        android:layout_below="@+id/textView1"
         android:gravity="center_vertical"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
         android:text="@string/radio1" />
 
     <RadioButton
@@ -62,7 +53,10 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_below="@+id/radioButton1"
         android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:layout_centerInParent="true"
         android:text="@string/radio2" />
 
     <RadioButton
@@ -70,7 +64,10 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_below="@+id/radioButton2"
         android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:layout_centerInParent="true"
         android:text="@string/radio3" />
 
     <TextView
@@ -80,6 +77,8 @@
         android:layout_gravity="left"
         android:layout_marginTop="40dp"
         android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/radioButton3"
         android:text="@string/poi_title" />
 
     
@@ -89,6 +88,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/textView2"
         android:text="@string/hotels" />
 
     <RadioButton
@@ -97,16 +99,66 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/radioButton4"
+       	android:layout_centerInParent="true"
         android:text="@string/restaurants" />
 
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-       android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:layout_below="@+id/radioButton5"
+       	android:layout_centerInParent="true"
         android:text="@string/button" />
-    </LinearLayout>
 
+    <Button
+        android:id="@+id/button3"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/radioButton2"
+        android:layout_toRightOf="@+id/button1"
+        android:text="@string/details" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/button4"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button3"
+        android:layout_alignTop="@+id/radioButton3"
+        android:text="@string/details"/>
+
+    <Button
+        android:id="@+id/button2"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button3"
+        android:layout_alignTop="@+id/radioButton1"
+        android:text="@string/details" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageView1"
+        android:layout_toRightOf="@+id/imageView1"
+        android:text="@string/title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="60sp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_below="@+id/textView3"
+        android:text="@string/subtitle"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

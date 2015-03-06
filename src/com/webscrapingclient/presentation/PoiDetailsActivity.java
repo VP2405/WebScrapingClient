@@ -70,27 +70,9 @@ public class PoiDetailsActivity extends Activity
 			public void onClick(View v)
 			{
 				//apre una custom dialog con la lista dei rating per categoria
-				// TODO Auto-generated method stub
-				list_dialog = new Dialog(getBaseContext());
-    			list_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-    			list_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-    			list_dialog.setContentView(R.layout.list_dialog);
+				createDialog();
     			
-    			ListView list = (ListView)list_dialog.findViewById(R.id.dialog_list);
-    			list.setAdapter(adapter);
-    
-    			Button positiveButton = (Button) list_dialog.findViewById(R.id.positive_button);
-    			
-    			positiveButton.setOnClickListener(new OnClickListener(){
 
-    				@Override
-    				public void onClick(View arg0) {
-
-    					list_dialog.dismiss();	
-    				}
-    			});
-    
-    			list_dialog.show();	
 				
 			}
 		});
@@ -128,6 +110,33 @@ public class PoiDetailsActivity extends Activity
 	{
 		// TODO Auto-generated method stub
 		super.onResume();
+	}
+	
+	
+	
+	private void createDialog()
+	{
+		list_dialog = new Dialog(getBaseContext());
+		list_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		list_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		list_dialog.setContentView(R.layout.list_dialog);
+		
+		ListView list = (ListView)list_dialog.findViewById(R.id.dialog_list);
+		list.setAdapter(adapter);
+
+		Button positiveButton = (Button) list_dialog.findViewById(R.id.positive_button);
+		
+		
+		positiveButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+
+				list_dialog.dismiss();	
+			}
+		});
+
+		list_dialog.show();	
 	}
 
 }
