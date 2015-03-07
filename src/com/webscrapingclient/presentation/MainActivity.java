@@ -1,5 +1,7 @@
 package com.webscrapingclient.presentation;
 
+import java.util.List;
+
 import com.example.webscrapingclientandroid.R;
 
 import android.app.Activity;
@@ -16,7 +18,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
+
 import com.webscrapingclient.controller.*;
+import com.webscrapingclient.utils.Profile;
 
 public class MainActivity extends Activity {
 	
@@ -25,7 +29,8 @@ public class MainActivity extends Activity {
 	private boolean hotel_chosen = false;
 	private int flagPoi;   //vale 0 se viene scelto hotel, 1 se viene scelto ristoranti  
 	private Dialog dialog;
-	private List<Profile> profile;
+	private List<Profile> profileList;
+	private Profile profile;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +66,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v)
 			{
 				//mostra dettagli all'interno di una dialog 
-				
+				createDialog(1);
 			}
 		});
         
@@ -165,7 +170,7 @@ public class MainActivity extends Activity {
     
     
     
-    private void createDialog()
+    private void createDialog(int idProfile)
 	{
 		dialog = new Dialog(getBaseContext());
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -173,7 +178,7 @@ public class MainActivity extends Activity {
 		dialog.setContentView(R.layout.list_dialog);
 		
 		//setta informazioni del profilo
-		setProfileInformation();
+		setProfileInformation(idProfile);
 		
 		
 		Button positiveButton = (Button)dialog.findViewById(R.id.positive_button);
@@ -195,10 +200,12 @@ public class MainActivity extends Activity {
 	/**
 	 * Riempie la dialog creata con le informazioni
 	 * del profilo utente corrispondente
+	 * 
+	 * @param id	id del profilo da visualizzare, corrisponde alla posizione in lista
 	 */
-	private void setProfileInformation()
+	private void setProfileInformation(int id)
 	{
-		
+		profileList.get(id);
 		
 	}
 

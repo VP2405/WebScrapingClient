@@ -7,6 +7,16 @@
 package com.webscrapingclient.presentation;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import com.example.webscrapingclientandroid.R;
 
 import android.app.Activity;
@@ -16,6 +26,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -28,6 +39,7 @@ public class SplashScreenActivity extends Activity
 {
 	// Splash screen timer
     private static int TIME_OUT = 3000;
+    private String tag = "SplashScreenActivity";
 	
 	
 	 @Override
@@ -72,16 +84,42 @@ public class SplashScreenActivity extends Activity
    			 public void run() {
    				 
    				 //TODO richiama il servizio
-
+   				 try
+				{
+					callRestService();
+				} catch (ClientProtocolException e)
+				{
+					Log.v(tag, "ClientProtocolException");
+					e.printStackTrace();
+				} catch (IOException e)
+				{
+					Log.v(tag, "IOException");
+					e.printStackTrace();
+				}
    				 
    				 progress.cancel();
    			 }
+
+
    		 }).start();
 	        
 	        
 	    }
 
-	
+		private void callRestService() throws ClientProtocolException, IOException
+		{
+			// TODO Auto-generated method stub
+			String urlString = "http://"+"";
+			
+			HttpClient client = new DefaultHttpClient();
+	        HttpGet request = new HttpGet(urlString);
+	        HttpResponse response = client.execute(request);
+	        BufferedReader rd = new BufferedReader (new InputStreamReader(response.getEntity().getContent()));
+	        String line = "";
+	        while ((line = rd.readLine()) != null) {
+	          System.out.println(line);
+	        }
+		}
 	
 	
 }
