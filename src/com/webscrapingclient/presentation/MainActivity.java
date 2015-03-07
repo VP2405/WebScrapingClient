@@ -16,15 +16,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
-
+import com.webscrapingclient.controller.*;
 
 public class MainActivity extends Activity {
 	
 	private RadioButton rbProfile1, rbProfile2, rbProfile3, rbHotels, rbRestaurants;
 	private Button btn_profile1, btn_profile2, btn_profile3, startButton;
 	private boolean hotel_chosen = false;
+	private int flagPoi;   //vale 0 se viene scelto hotel, 1 se viene scelto ristoranti  
 	private Dialog dialog;
-
+	private List<Profile> profile;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +73,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v)
 			{
-				// TODO Auto-generated method stub
+				// TODO mostra dettagli profilo 2
 				
 			}
 		});
@@ -83,7 +85,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v)
 			{
-				// TODO Auto-generated method stub
+				// TODO Mostra dettagli profilo 3
 				
 			}
 		});
@@ -98,36 +100,34 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v)
 			{
-				
+				ControllerStartButton controllerStartButton = new ControllerStartButton();
 				// controlla il profilo scelto
 				if (rbProfile1.isSelected())
 				{
-					//TODO
+					controllerStartButton.fillProfile();
 				}
 				else if (rbProfile2.isSelected()) 
 				{
-					
-					//TODO
+					controllerStartButton.fillProfile();
 				}
 				else if (rbProfile3.isSelected())
 				{
-					//TODO
+					controllerStartButton.fillProfile();
 				}
-				
-				//TODO metodo per il parsing del profilo
-				
-				
-				
-				//TODO query al db
-				
-				
 				
 				// controllo del tipo di Poi scelto
 				if(rbHotels.isSelected())
 				{
+					flagPoi = 0;
 					hotel_chosen = true;
 				}
+				else if(rbRestaurants.isSelected())
+				{
+					flagPoi = 1;
+				}
 				
+				//TODO query al db
+				controllerStartButton.manageQuery(flagPoi);
 				
 				//passa all'activity contenente la lista dei poi filtrati
 				Intent intent = new Intent(MainActivity.this, PoiDetailsActivity.class);
