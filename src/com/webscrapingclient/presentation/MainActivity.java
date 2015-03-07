@@ -18,6 +18,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.webscrapingclient.controller.*;
 import com.webscrapingclient.utils.Profile;
@@ -79,7 +81,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v)
 			{
 				// TODO mostra dettagli profilo 2
-				
+				createDialog(2);
 			}
 		});
         
@@ -91,7 +93,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v)
 			{
 				// TODO Mostra dettagli profilo 3
-				
+				createDialog(3);
 			}
 		});
         
@@ -119,6 +121,12 @@ public class MainActivity extends Activity {
 				{
 					controllerStartButton.fillProfile();
 				}
+				else //nessun profilo selezionato
+				{
+					Toast toast = new Toast(getApplicationContext());
+					toast.setText("Nessun profilo selezionato");
+					toast.setDuration(Toast.LENGTH_LONG);
+				}
 				
 				// controllo del tipo di Poi scelto
 				if(rbHotels.isSelected())
@@ -129,6 +137,11 @@ public class MainActivity extends Activity {
 				else if(rbRestaurants.isSelected())
 				{
 					flagPoi = 1;
+				}
+				else {
+					Toast toast = new Toast(getApplicationContext());
+					toast.setText("Selezionare tipologia di PoI");
+					toast.setDuration(Toast.LENGTH_LONG);
 				}
 				
 				//TODO query al db
@@ -170,19 +183,29 @@ public class MainActivity extends Activity {
     
     
     
+    /**
+     * Crea la dialog atta a contenere 
+     * le informazioni del profilo selezionato
+     * 
+     * @param idProfile	id del profilo
+     */
     private void createDialog(int idProfile)
 	{
 		dialog = new Dialog(getBaseContext());
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-		dialog.setContentView(R.layout.list_dialog);
+		dialog.setContentView(R.layout.custom_dialog);
 		
-		//setta informazioni del profilo
-		setProfileInformation(idProfile);
+		//recupera il layout e setta titolo e testo del bottone
+		TextView title_dialog = (TextView) dialog.findViewById (R.id.dialog_title);
+		title_dialog.setText("Profile "+idProfile);
+		TextView text = (TextView) dialog.findViewById(R.id.message);
+		Button positiveButton = (Button) dialog.findViewById(R.id.positive_button);
+		positiveButton.setText("Ok");
 		
-		
-		Button positiveButton = (Button)dialog.findViewById(R.id.positive_button);
-		
+		//setta informazioni del profilo sulla dialog
+		String profileDetails = setProfileInformation(idProfile);
+		text.setText(profileDetails);
 		
 		positiveButton.setOnClickListener(new OnClickListener(){
 
@@ -198,14 +221,17 @@ public class MainActivity extends Activity {
 
 
 	/**
-	 * Riempie la dialog creata con le informazioni
-	 * del profilo utente corrispondente
+	 * Recupera le informazioni
+	 * del profilo utente corrispondente all'id in input
 	 * 
 	 * @param id	id del profilo da visualizzare, corrisponde alla posizione in lista
+	 * @return 
 	 */
-	private void setProfileInformation(int id)
+	private String setProfileInformation(int id)
 	{
-		profileList.get(id);
+		String profileString = profileList.get(id).toString();
+		return profileString;
+		
 		
 	}
 

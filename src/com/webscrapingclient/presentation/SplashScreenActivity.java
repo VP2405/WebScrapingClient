@@ -18,6 +18,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.example.webscrapingclientandroid.R;
+import com.google.gson.Gson;
+import com.webscrapingclient.utils.Profile;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -96,7 +98,7 @@ public class SplashScreenActivity extends Activity
 					Log.v(tag, "IOException");
 					e.printStackTrace();
 				}
-   				 
+			 
    				 progress.cancel();
    			 }
 
@@ -106,6 +108,13 @@ public class SplashScreenActivity extends Activity
 	        
 	    }
 
+		/**
+		 * Richiama il servizio rest utilizzando un client Apache Http
+		 * per ottenere la lista dei profili in formato JSON
+		 * 
+		 * @throws ClientProtocolException
+		 * @throws IOException
+		 */
 		private void callRestService() throws ClientProtocolException, IOException
 		{
 			// TODO Auto-generated method stub
@@ -114,11 +123,19 @@ public class SplashScreenActivity extends Activity
 			HttpClient client = new DefaultHttpClient();
 	        HttpGet request = new HttpGet(urlString);
 	        HttpResponse response = client.execute(request);
+	        
 	        BufferedReader rd = new BufferedReader (new InputStreamReader(response.getEntity().getContent()));
+	        
+	        //stampa a video
 	        String line = "";
 	        while ((line = rd.readLine()) != null) {
 	          System.out.println(line);
 	        }
+	        
+	        //conversione in oggetto di tipo Profile
+	        Gson gson = new Gson();
+	        gson.fromJson(rd, Profile.class);
+	        
 		}
 	
 	
