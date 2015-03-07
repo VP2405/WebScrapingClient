@@ -119,9 +119,9 @@ public class PoiDetailsActivity extends Activity
 		list_dialog = new Dialog(getBaseContext());
 		list_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		list_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-		list_dialog.setContentView(R.layout.list_dialog);
+		list_dialog.setContentView(R.layout.custom_dialog);
 		
-		ListView list = (ListView)list_dialog.findViewById(R.id.dialog_list);
+		ListView list = (ListView)list_dialog.findViewById(R.layout.custom_dialog);
 		list.setAdapter(adapter);
 
 		Button positiveButton = (Button) list_dialog.findViewById(R.id.positive_button);
