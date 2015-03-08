@@ -2,28 +2,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/flag"
     android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_marginTop="336dp"
+        android:text="@string/title"
+        android:textSize="60sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="37dp"
+        android:layout_marginTop="226dp"
+        android:src="@drawable/flag" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView1"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/subtitle"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView2"
         android:layout_centerVertical="true"
-        android:text="@string/title"
-        android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_marginRight="38dp"
+        android:text="@string/subtitle"
+        android:textSize="40sp" />
 
 </RelativeLayout>

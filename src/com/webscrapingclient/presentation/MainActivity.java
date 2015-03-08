@@ -24,6 +24,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.webscrapingclient.controller.*;
+import com.webscrapingclient.poi.jsonmanager.PoiJsonParser;
 import com.webscrapingclient.utils.CommercialProfile;
 import com.webscrapingclient.utils.Profile;
 
@@ -74,8 +76,10 @@ public class MainActivity extends Activity
 		// bottone submit
 		startButton = (Button) findViewById(R.id.button1);
 
+		
+		
 		/*
-		 * Implementazione dei listener dei bottoni
+		 * Implementazione dei listener dei bottoni relativi ai profili
 		 */
 
 		// listener bottoni dettagli profilo 1
@@ -86,7 +90,7 @@ public class MainActivity extends Activity
 			public void onClick(View v)
 			{
 				// mostra dettagli all'interno di una dialog
-				createDialog(1);
+				createDialogForProfile(1);
 			}
 		});
 
@@ -98,7 +102,7 @@ public class MainActivity extends Activity
 			public void onClick(View v)
 			{
 				// TODO mostra dettagli profilo 2
-				createDialog(2);
+				createDialogForProfile(2);
 			}
 		});
 
@@ -110,10 +114,11 @@ public class MainActivity extends Activity
 			public void onClick(View v)
 			{
 				// TODO Mostra dettagli profilo 3
-				createDialog(3);
+				createDialogForProfile(3);
 			}
 		});
 
+		
 		// listener per il bottone di ricerca
 		startButton.setOnClickListener(new OnClickListener()
 		{
@@ -132,14 +137,9 @@ public class MainActivity extends Activity
 				} else if (rbProfile3.isSelected())
 				{
 					controllerStartButton.fillProfile();
-				} else
-				// nessun profilo selezionato
-				{
-					//mostra un toast all'utente 
-//					Toast toast = new Toast(getApplicationContext());
-//					toast.setText("Nessun profilo selezionato");
-//					toast.setDuration(Toast.LENGTH_LONG);
 				}
+				
+
 
 				// controllo del tipo di Poi scelto
 				if (rbHotels.isSelected())
@@ -149,21 +149,34 @@ public class MainActivity extends Activity
 				} else if (rbRestaurants.isSelected())
 				{
 					flagPoi = 1;
-				} else
-				{
-//					Toast toast = new Toast(getApplicationContext());
-//					toast.setText("Selezionare tipologia di PoI");
-//					toast.setDuration(Toast.LENGTH_LONG);
 				}
 
-				// TODO query al db
-				controllerStartButton.manageQuery(flagPoi);
+				
+//				if(!rbProfile1.isSelected() && !rbProfile2.isSelected() && !rbProfile3.isSelected())
+//				{
+//				    Toast toast = Toast.makeText(MainActivity.this, "message", Toast.LENGTH_SHORT);
+//				    toast.setText("Nessun profilo selezionato");
+//				    toast.setDuration(Toast.LENGTH_LONG);
+//				    toast.show();
+//				}
+//				else if(!rbHotels.isSelected() && !rbRestaurants.isSelected())
+//				{
+//				    Toast toast = Toast.makeText(MainActivity.this, "message", Toast.LENGTH_SHORT);
+//				    toast.setText("Selezionare tipologia di PoI");
+//				    toast.setDuration(Toast.LENGTH_LONG);
+//				   
+//				    toast.show();
+//				}
+//				else {
+					// passa all'activity contenente la lista dei poi filtrati					
+					
+					Intent intent = new Intent(MainActivity.this, PoiDetailsActivity.class);
+					intent.putExtra("typeChoice", hotel_chosen);
+					startActivity(intent);
+					finish();
+					
+				//}
 
-				// passa all'activity contenente la lista dei poi filtrati
-				Intent intent = new Intent(MainActivity.this, PoiDetailsActivity.class);
-				intent.putExtra("typeChoice", hotel_chosen);
-				startActivity(intent);
-				finish();
 
 			}
 		});
@@ -198,7 +211,7 @@ public class MainActivity extends Activity
 	 * @param idProfile
 	 *            id del profilo
 	 */
-	private void createDialog(int idProfile)
+	private void createDialogForProfile(int idProfile)
 	{
 		dialog = new Dialog(MainActivity.this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -229,9 +242,11 @@ public class MainActivity extends Activity
 		dialog.show();
 	}
 
+	
+	
 	/**
 	 * Recupera le informazioni del profilo utente corrispondente all'id in
-	 * input. PER ORA STAMPA IL JSON, OCCORRE FINIRE IL PARSER
+	 * input. 
 	 * 
 	 * @param id
 	 *            id del profilo da visualizzare, corrisponde alla posizione in
@@ -243,7 +258,7 @@ public class MainActivity extends Activity
 		String responseJsonString = null;
 		try
 		{
-			responseJsonString = callRestService(id);
+			responseJsonString = callRestServiceForProfile(id);
 		} catch (ClientProtocolException e)
 		{
 			
@@ -253,11 +268,13 @@ public class MainActivity extends Activity
 			
 			e.printStackTrace();
 		}
-		// String profileString = profileList.get(id).toString();
 
 		return responseJsonString;
 
 	}
+	
+	
+	
 
 	/**
 	 * Richiama il servizio rest utilizzando un client Apache Http per ottenere
@@ -266,9 +283,9 @@ public class MainActivity extends Activity
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	private String callRestService(int id) throws ClientProtocolException, IOException
+	private String callRestServiceForProfile(int id) throws ClientProtocolException, IOException
 	{
-		// TODO Auto-generated method stub
+		
 		String urlString = "http://192.168.1.102:5555/scorci/profile/" + id;
 
 		//necessario per la connessione
@@ -291,23 +308,15 @@ public class MainActivity extends Activity
 		String line = "";
 		while ((line = rd.readLine()) != null)
 		{
-			System.out.println("JSON:"+line);
+			//System.out.println("JSON:"+line);
 			sbBuilder.append(line);
 		}
 
-		//TODO conversione in oggetto di tipo Profile DA FINIRE
+		// deserializzazione del Json ricevuto in un oggetto di tipo Profile
 		Gson gson = new Gson();
 		Profile profile = gson.fromJson(sbBuilder.toString(), Profile.class);
-		
-		
-//		System.out.println(profile.getStatus());
-//		System.out.println(profile.getMap().getCommercialProfile().getIsDemanding());
-//		System.out.println(profile.getMap().getCommercialProfile().getId());
-		// Log.v("status",""+profile.getStatus());
-		// Log.v("oggetto", profile.toString());
 
 		return profile.getMap().getCommercialProfile().toString();
-		//return sbBuilder.toString();
 
 	}
 
