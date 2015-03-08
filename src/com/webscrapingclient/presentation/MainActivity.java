@@ -1,8 +1,20 @@
 package com.webscrapingclient.presentation;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import com.example.webscrapingclientandroid.R;
+import com.google.gson.Gson;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -10,6 +22,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,61 +36,64 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.webscrapingclient.controller.*;
+import com.webscrapingclient.utils.CommercialProfile;
 import com.webscrapingclient.utils.Profile;
 
-public class MainActivity extends Activity {
-	
+public class MainActivity extends Activity
+{
+
 	private RadioButton rbProfile1, rbProfile2, rbProfile3, rbHotels, rbRestaurants;
 	private Button btn_profile1, btn_profile2, btn_profile3, startButton;
 	private boolean hotel_chosen = false;
-	private int flagPoi;   //vale 0 se viene scelto hotel, 1 se viene scelto ristoranti  
+	private int flagPoi; // vale 0 se viene scelto hotel, 1 se viene scelto
+							// ristoranti
 	private Dialog dialog;
-	private List<Profile> profileList;
-	private Profile profile;
-	
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        
-        //radiobuttons profili
-        rbProfile1 = (RadioButton)findViewById(R.id.radioButton1);
-        rbProfile2 = (RadioButton)findViewById(R.id.radioButton2);
-        rbProfile3 = (RadioButton)findViewById(R.id.radioButton3);
-        
-        //bottoni dettagli profili
-        btn_profile1 = (Button)findViewById(R.id.button2);
-        btn_profile2 = (Button)findViewById(R.id.button3);
-        btn_profile3 = (Button)findViewById(R.id.button4);
-        
-        //radiobuttons tipologia poi
-        rbHotels 		= (RadioButton)findViewById(R.id.radioButton4);
-        rbRestaurants 	= (RadioButton)findViewById(R.id.radioButton5);
-        
-        //bottone submit
-        startButton = (Button)findViewById(R.id.button1);
-        
-        /*
-         * Implementazione dei listener dei bottoni
-         */
-        
-        //listener bottoni dettagli profilo 1
-        btn_profile1.setOnClickListener(new OnClickListener()
+	private List<CommercialProfile> profileList;
+	private CommercialProfile profile;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		// radiobuttons profili
+		rbProfile1 = (RadioButton) findViewById(R.id.radioButton1);
+		rbProfile2 = (RadioButton) findViewById(R.id.radioButton2);
+		rbProfile3 = (RadioButton) findViewById(R.id.radioButton3);
+
+		// bottoni dettagli profili
+		btn_profile1 = (Button) findViewById(R.id.button2);
+		btn_profile2 = (Button) findViewById(R.id.button3);
+		btn_profile3 = (Button) findViewById(R.id.button4);
+
+		// radiobuttons tipologia poi
+		rbHotels = (RadioButton) findViewById(R.id.radioButton4);
+		rbRestaurants = (RadioButton) findViewById(R.id.radioButton5);
+
+		// bottone submit
+		startButton = (Button) findViewById(R.id.button1);
+
+		/*
+		 * Implementazione dei listener dei bottoni
+		 */
+
+		// listener bottoni dettagli profilo 1
+		btn_profile1.setOnClickListener(new OnClickListener()
 		{
-			
+
 			@Override
 			public void onClick(View v)
 			{
-				//mostra dettagli all'interno di una dialog 
+				// mostra dettagli all'interno di una dialog
 				createDialog(1);
 			}
 		});
-        
-        
-        //listener bottoni dettagli profilo 2
-        btn_profile2.setOnClickListener(new OnClickListener()
+
+		// listener bottoni dettagli profilo 2
+		btn_profile2.setOnClickListener(new OnClickListener()
 		{
-			
+
 			@Override
 			public void onClick(View v)
 			{
@@ -84,11 +101,11 @@ public class MainActivity extends Activity {
 				createDialog(2);
 			}
 		});
-        
-        //listener bottoni dettagli profilo 3
-        btn_profile3.setOnClickListener(new OnClickListener()
+
+		// listener bottoni dettagli profilo 3
+		btn_profile3.setOnClickListener(new OnClickListener()
 		{
-			
+
 			@Override
 			public void onClick(View v)
 			{
@@ -96,14 +113,11 @@ public class MainActivity extends Activity {
 				createDialog(3);
 			}
 		});
-        
-        
-        
-        
-        //listener per il bottone di ricerca
-        startButton.setOnClickListener(new OnClickListener()
+
+		// listener per il bottone di ricerca
+		startButton.setOnClickListener(new OnClickListener()
 		{
-			
+
 			@Override
 			public void onClick(View v)
 			{
@@ -112,127 +126,184 @@ public class MainActivity extends Activity {
 				if (rbProfile1.isSelected())
 				{
 					controllerStartButton.fillProfile();
-				}
-				else if (rbProfile2.isSelected()) 
+				} else if (rbProfile2.isSelected())
 				{
 					controllerStartButton.fillProfile();
-				}
-				else if (rbProfile3.isSelected())
+				} else if (rbProfile3.isSelected())
 				{
 					controllerStartButton.fillProfile();
-				}
-				else //nessun profilo selezionato
+				} else
+				// nessun profilo selezionato
 				{
-					Toast toast = new Toast(getApplicationContext());
-					toast.setText("Nessun profilo selezionato");
-					toast.setDuration(Toast.LENGTH_LONG);
+					//mostra un toast all'utente 
+//					Toast toast = new Toast(getApplicationContext());
+//					toast.setText("Nessun profilo selezionato");
+//					toast.setDuration(Toast.LENGTH_LONG);
 				}
-				
+
 				// controllo del tipo di Poi scelto
-				if(rbHotels.isSelected())
+				if (rbHotels.isSelected())
 				{
 					flagPoi = 0;
 					hotel_chosen = true;
-				}
-				else if(rbRestaurants.isSelected())
+				} else if (rbRestaurants.isSelected())
 				{
 					flagPoi = 1;
+				} else
+				{
+//					Toast toast = new Toast(getApplicationContext());
+//					toast.setText("Selezionare tipologia di PoI");
+//					toast.setDuration(Toast.LENGTH_LONG);
 				}
-				else {
-					Toast toast = new Toast(getApplicationContext());
-					toast.setText("Selezionare tipologia di PoI");
-					toast.setDuration(Toast.LENGTH_LONG);
-				}
-				
-				//TODO query al db
+
+				// TODO query al db
 				controllerStartButton.manageQuery(flagPoi);
-				
-				//passa all'activity contenente la lista dei poi filtrati
+
+				// passa all'activity contenente la lista dei poi filtrati
 				Intent intent = new Intent(MainActivity.this, PoiDetailsActivity.class);
 				intent.putExtra("typeChoice", hotel_chosen);
 				startActivity(intent);
 				finish();
-				
+
 			}
 		});
-        
-        
-        
-        
-    }
 
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    
-    
-    
-    /**
-     * Crea la dialog atta a contenere 
-     * le informazioni del profilo selezionato
-     * 
-     * @param idProfile	id del profilo
-     */
-    private void createDialog(int idProfile)
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		dialog = new Dialog(getBaseContext());
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings)
+		{
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * Crea la dialog atta a contenere le informazioni del profilo selezionato
+	 * 
+	 * @param idProfile
+	 *            id del profilo
+	 */
+	private void createDialog(int idProfile)
+	{
+		dialog = new Dialog(MainActivity.this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		dialog.setContentView(R.layout.custom_dialog);
-		
-		//recupera il layout e setta titolo e testo del bottone
-		TextView title_dialog = (TextView) dialog.findViewById (R.id.dialog_title);
-		title_dialog.setText("Profile "+idProfile);
+
+		// recupera il layout e setta titolo e testo del bottone
+		TextView title_dialog = (TextView) dialog.findViewById(R.id.dialog_title);
+		title_dialog.setText("Profile " + idProfile);
 		TextView text = (TextView) dialog.findViewById(R.id.message);
 		Button positiveButton = (Button) dialog.findViewById(R.id.positive_button);
 		positiveButton.setText("Ok");
-		
-		//setta informazioni del profilo sulla dialog
-		String profileDetails = setProfileInformation(idProfile);
-		text.setText(profileDetails);
-		
-		positiveButton.setOnClickListener(new OnClickListener(){
+
+		// setta informazioni del profilo sulla dialog
+		text.setText(setProfileInformation(idProfile));
+
+		positiveButton.setOnClickListener(new OnClickListener()
+		{
 
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0)
+			{
 
-				dialog.dismiss();	
+				dialog.dismiss();
 			}
 		});
 
-		dialog.show();	
+		dialog.show();
 	}
 
-
 	/**
-	 * Recupera le informazioni
-	 * del profilo utente corrispondente all'id in input
+	 * Recupera le informazioni del profilo utente corrispondente all'id in
+	 * input. PER ORA STAMPA IL JSON, OCCORRE FINIRE IL PARSER
 	 * 
-	 * @param id	id del profilo da visualizzare, corrisponde alla posizione in lista
-	 * @return 
+	 * @param id
+	 *            id del profilo da visualizzare, corrisponde alla posizione in
+	 *            lista
+	 * @return
 	 */
 	private String setProfileInformation(int id)
 	{
-		String profileString = profileList.get(id).toString();
-		return profileString;
+		String responseJsonString = null;
+		try
+		{
+			responseJsonString = callRestService(id);
+		} catch (ClientProtocolException e)
+		{
+			
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			
+			e.printStackTrace();
+		}
+		// String profileString = profileList.get(id).toString();
+
+		return responseJsonString;
+
+	}
+
+	/**
+	 * Richiama il servizio rest utilizzando un client Apache Http per ottenere
+	 * i profili in formato JSON, e parsarli tramite Gson in un oggetto di tipo Profile
+	 * 
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	private String callRestService(int id) throws ClientProtocolException, IOException
+	{
+		// TODO Auto-generated method stub
+		String urlString = "http://192.168.1.102:5555/scorci/profile/" + id;
+
+		//necessario per la connessione
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+		//crea richiesta http per accedere al servizio REST
+		HttpClient client = new DefaultHttpClient();
+
+		client.getParams().getParameter(ConnRoutePNames.DEFAULT_PROXY);
+
+		HttpGet request = new HttpGet(urlString.trim());
+		HttpResponse response = client.execute(request);
+
+		//recupera il json
+		BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+		StringBuilder sbBuilder = new StringBuilder();
 		
-		
+
+		String line = "";
+		while ((line = rd.readLine()) != null)
+		{
+			System.out.println(line);
+			sbBuilder.append(line);
+		}
+
+		//TODO conversione in oggetto di tipo Profile DA FINIRE
+		Gson gson = new Gson();
+		Profile profile = gson.fromJson(rd, Profile.class);
+		// System.out.println(profile.getMap().getCommercialProfile().getId());
+		// Log.v("status",""+profile.getStatus());
+		// Log.v("oggetto", profile.toString());
+
+		return sbBuilder.toString();
+
 	}
 
 }

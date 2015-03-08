@@ -19,7 +19,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.example.webscrapingclientandroid.R;
 import com.google.gson.Gson;
-import com.webscrapingclient.utils.Profile;
+import com.webscrapingclient.utils.CommercialProfile;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -69,74 +69,74 @@ public class SplashScreenActivity extends Activity
 	         * terminati i 3 secondi richiama i servizi REST per ottenere la lista dei profili
 	         * mostrando per tutto il tempo di recupero dei dati una progress dialog
 	         */
-	     final ProgressDialog progress = new ProgressDialog(SplashScreenActivity.this);
-   		 progress.requestWindowFeature(Window.FEATURE_PROGRESS);
-   		 progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-   		 progress.show();
-   		 progress.setContentView(R.layout.custom_pd);
-   		 progress.setTitle(null);
-   		 TextView text = (TextView) progress.findViewById(R.id.progress_msg);
-   		 text.setText("Recupero profili in corso..");
-   		 progress.setIndeterminate(true);
-   		 progress.setCancelable(false);
+//	     final ProgressDialog progress = new ProgressDialog(SplashScreenActivity.this);
+//   		 progress.requestWindowFeature(Window.FEATURE_PROGRESS);
+//   		 progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//   		 progress.show();
+//   		 progress.setContentView(R.layout.custom_pd);
+//   		 progress.setTitle(null);
+//   		 TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+//   		 text.setText("Recupero profili in corso..");
+//   		 progress.setIndeterminate(true);
+//   		 progress.setCancelable(false);
 
    		 
 
-   		 new Thread(new Runnable() {
-   			 public void run() {
-   				 
-   				 //TODO richiama il servizio
-   				 try
-				{
-					callRestService();
-				} catch (ClientProtocolException e)
-				{
-					Log.v(tag, "ClientProtocolException");
-					e.printStackTrace();
-				} catch (IOException e)
-				{
-					Log.v(tag, "IOException");
-					e.printStackTrace();
-				}
-			 
-   				 progress.cancel();
-   			 }
-
-
-   		 }).start();
-	        
+//   		 new Thread(new Runnable() {
+//   			 public void run() {
+//   				 
+//   				 //TODO richiama il servizio
+//   				 try
+//				{
+//					callRestService();
+//				} catch (ClientProtocolException e)
+//				{
+//					Log.v(tag, "ClientProtocolException");
+//					e.printStackTrace();
+//				} catch (IOException e)
+//				{
+//					Log.v(tag, "IOException");
+//					e.printStackTrace();
+//				}
+//			 
+//   				 progress.cancel();
+//   			 }
+//
+//
+//   		 }).start();
+//	        
 	        
 	    }
 
-		/**
-		 * Richiama il servizio rest utilizzando un client Apache Http
-		 * per ottenere la lista dei profili in formato JSON
-		 * 
-		 * @throws ClientProtocolException
-		 * @throws IOException
-		 */
-		private void callRestService() throws ClientProtocolException, IOException
-		{
-			// TODO Auto-generated method stub
-			String urlString = "http://"+"";
-			
-			HttpClient client = new DefaultHttpClient();
-	        HttpGet request = new HttpGet(urlString);
-	        HttpResponse response = client.execute(request);
-	        
-	        BufferedReader rd = new BufferedReader (new InputStreamReader(response.getEntity().getContent()));
-	        
-	        //stampa a video
-	        String line = "";
-	        while ((line = rd.readLine()) != null) {
-	          System.out.println(line);
-	        }
-	        
-	        //conversione in oggetto di tipo Profile
-	        Gson gson = new Gson();
-	        gson.fromJson(rd, Profile.class);
-	        
-		}
+//		/**
+//		 * Richiama il servizio rest utilizzando un client Apache Http
+//		 * per ottenere la lista dei profili in formato JSON
+//		 * 
+//		 * @throws ClientProtocolException
+//		 * @throws IOException
+//		 */
+//		private void callRestService() throws ClientProtocolException, IOException
+//		{
+//			// TODO Auto-generated method stub
+//			String urlString = "http://"+"";
+//			
+//			HttpClient client = new DefaultHttpClient();
+//	        HttpGet request = new HttpGet(urlString);
+//	        HttpResponse response = client.execute(request);
+//	        
+//	        BufferedReader rd = new BufferedReader (new InputStreamReader(response.getEntity().getContent()));
+//	        
+//	        //stampa a video
+//	        String line = "";
+//	        while ((line = rd.readLine()) != null) {
+//	          System.out.println(line);
+//	        }
+//	        
+//	        //conversione in oggetto di tipo Profile
+//	        Gson gson = new Gson();
+//	        gson.fromJson(rd, Profile.class);
+//	        
+//		}
 	
 	
 }

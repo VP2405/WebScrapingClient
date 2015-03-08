@@ -1,84 +1,66 @@
+/**
+ * 
+ */
 package com.webscrapingclient.utils;
 
-public class Profile {
+import android.R.string;
 
-	private final static int MIN_MISER = 1;
-	private final static int MAX_MISER = 4;
+/**
+ * @author Vanessa
+ *
+ */
+public class Profile
+{
+
+	private int status;
+	private String description;
+	private Map map;
 	
-	private final static int MIN_DEMANDING = 1;
-	private final static int MAX_DEMANDING = 3;
-
-	
-	private int id;
-	private int isMiser;
-	private String favouriteCuisine;
-	private int isDemanding;
-	
-	public Profile(int id,int isMiser,String favouriteCuisine,int isDemanding) {
-		this.id = id;
-		this.isMiser = isMiser;
-		this.favouriteCuisine = favouriteCuisine;
-		this.isDemanding = isDemanding;
-	}
-	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getIsMiser() {
-		return this.isMiser;
-	}
-
-	public void setIsMiser(int isMiser) throws Exception {
-		if (isMiser >= MIN_MISER && isMiser <= MAX_MISER)
-			this.isMiser = isMiser;
-		else
-			throw new Exception(String.format(
-					"The isMiser value must be between %d and %d", MIN_MISER,
-					MAX_MISER));
-	}
-
 	/**
-	 * Restituisce la percentuale di taccagneria dell'utente profilato.
 	 * 
-	 * @return
 	 */
-	public double getIsMiserPercentage() {
-		return (this.isMiser * 100) / MAX_MISER;
+	public Profile(int status, String description, Map map)
+	{
+		// TODO Auto-generated constructor stub
+		this.setStatus(status);
+		this.setDescription(description);
+		this.setMap(map);
 	}
 
-	public String getFavouriteCuisine() {
-		return this.favouriteCuisine;
+	@Override
+	public String toString()
+	{
+		return "Profile [status=" + status + ", description=" + description + ", map=" + map + "]";
 	}
 
-	public void setFavouriteCuisine(String favouriteCuisine) {
-		this.favouriteCuisine = favouriteCuisine;
+	public int getStatus()
+	{
+		return status;
 	}
 
-	public int getIsDemanding() {
-		return this.isDemanding;
+	public void setStatus(int status)
+	{
+		this.status = status;
 	}
 
-	/**
-	 * Restituisce la percentuale di pignoleria dell'utente profilato.
-	 * 
-	 * @return
-	 */
-	public double getIsDemandingPercentage() {
-		return (this.isDemanding * 100) / MAX_DEMANDING;
+	public String getDescription()
+	{
+		return description;
 	}
 
-	public void setIsDemanding(int isDemanding) throws Exception {
-		if (isDemanding >= MIN_DEMANDING && isDemanding <= MAX_DEMANDING)
-			this.isDemanding = isDemanding;
-		else
-			throw new Exception(String.format(
-					"The isDemanding value must be between %d and %d",
-					MIN_DEMANDING, MAX_DEMANDING));
+	public void setDescription(String description)
+	{
+		this.description = description;
 	}
+
+	public Map getMap()
+	{
+		return map;
+	}
+
+	public void setMap(Map map)
+	{
+		this.map = map;
+	}
+
 }
-
