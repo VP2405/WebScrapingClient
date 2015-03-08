@@ -11,12 +11,6 @@ public class Map
 {
 	private CommercialProfile commercialprofile;
 	
-	
-	
-	private Map(CommercialProfile commercialprofile)
-	{
-		this.commercialprofile = commercialprofile;
-	}
 
 	public CommercialProfile getCommercialProfile()
 	{

@@ -291,18 +291,23 @@ public class MainActivity extends Activity
 		String line = "";
 		while ((line = rd.readLine()) != null)
 		{
-			System.out.println(line);
+			System.out.println("JSON:"+line);
 			sbBuilder.append(line);
 		}
 
 		//TODO conversione in oggetto di tipo Profile DA FINIRE
 		Gson gson = new Gson();
-		Profile profile = gson.fromJson(rd, Profile.class);
-		// System.out.println(profile.getMap().getCommercialProfile().getId());
+		Profile profile = gson.fromJson(sbBuilder.toString(), Profile.class);
+		
+		
+//		System.out.println(profile.getStatus());
+//		System.out.println(profile.getMap().getCommercialProfile().getIsDemanding());
+//		System.out.println(profile.getMap().getCommercialProfile().getId());
 		// Log.v("status",""+profile.getStatus());
 		// Log.v("oggetto", profile.toString());
 
-		return sbBuilder.toString();
+		return profile.getMap().getCommercialProfile().toString();
+		//return sbBuilder.toString();
 
 	}
 

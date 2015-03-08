@@ -12,11 +12,6 @@ public class Position
 	private double latitude;
 	private double longitude;
 	
-	public Position(double latitude, double longitude)
-	{
-		this.setLatitude(latitude);
-		this.setLongitude(longitude);
-	}
 
 	@Override
 	public String toString()
