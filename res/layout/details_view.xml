@@ -40,8 +40,6 @@
                             android:layout_toRightOf="@+id/textView2"
                             android:text="@string/name_poi"
                             android:textStyle="bold"
-                            android:background="@color/green"
-                            android:textColor="@android:color/white"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <TextView
@@ -90,7 +88,7 @@
                             android:padding="10dp"
                             android:textColor="@android:color/white"
                             android:text="@string/cuisines_list"
-                            android:textSize="20dp" />
+                            android:textSize="10dp" />
 
                         <RatingBar
                             android:id="@+id/ratingBar1"

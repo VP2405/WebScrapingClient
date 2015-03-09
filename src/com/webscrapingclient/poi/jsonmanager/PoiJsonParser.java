@@ -19,10 +19,13 @@ public class PoiJsonParser
 {
 	
 	private PoiRestaurants restaurant;
+	
+	
+	
 
 	public PoiJsonParser (int id) throws IllegalStateException, IOException{
 		
-		String urlString = "http://192.168.1.102:5555/scorci/poi/"+id;
+		String urlString = "http://10.220.176.242:5555/scorci/poi/"+id;
 
 		//necessario per la connessione
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -60,7 +63,7 @@ public class PoiJsonParser
 			sbBuilder.append(line);
 		}
 
-		// deserializzazione del Json ricevuto in un oggetto di tipo Profile
+		// deserializzazione del Json ricevuto in un oggetto di tipo Restaurant
 		Gson gson = new Gson();
 		setRestaurant(gson.fromJson(sbBuilder.toString(), PoiRestaurants.class));
 		

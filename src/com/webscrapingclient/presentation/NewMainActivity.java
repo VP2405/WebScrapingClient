@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package com.webscrapingclient.presentation;
 
 import java.io.BufferedReader;
@@ -5,16 +8,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.example.webscrapingclientandroid.R;
-import com.google.gson.Gson;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -24,26 +23,30 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.webscrapingclient.controller.*;
-import com.webscrapingclient.poi.jsonmanager.PoiJsonParser;
+import com.example.webscrapingclientandroid.R;
+import com.google.gson.Gson;
+import com.webscrapingclient.controller.ControllerStartButton;
 import com.webscrapingclient.utils.CommercialProfile;
 import com.webscrapingclient.utils.Profile;
 
-public class MainActivity extends Activity
+/**
+ * @author Vanessa
+ *
+ */
+public class NewMainActivity extends Activity
 {
 
+	private RadioGroup rGroupProfiles, rGroupTypes;
 	private RadioButton rbProfile1, rbProfile2, rbProfile3, rbHotels, rbRestaurants;
 	private Button btn_profile1, btn_profile2, btn_profile3, startButton;
 	private boolean hotel_chosen = false;
@@ -57,24 +60,28 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main2);
 
+		//radiogroup 
+		rGroupProfiles 	= (RadioGroup)findViewById(R.id.radioGroup1);
+		rGroupTypes		= (RadioGroup)findViewById(R.id.radioGroup2);
+		
 		// radiobuttons profili
-		rbProfile1 = (RadioButton) findViewById(R.id.radioButton1);
-		rbProfile2 = (RadioButton) findViewById(R.id.radioButton2);
-		rbProfile3 = (RadioButton) findViewById(R.id.radioButton3);
+		rbProfile1 = (RadioButton) findViewById(R.id.radioProfile1);
+		rbProfile2 = (RadioButton) findViewById(R.id.radioProfile2);
+		rbProfile3 = (RadioButton) findViewById(R.id.radioProfile3);
 
 		// bottoni dettagli profili
-		btn_profile1 = (Button) findViewById(R.id.button2);
-		btn_profile2 = (Button) findViewById(R.id.button3);
-		btn_profile3 = (Button) findViewById(R.id.button4);
+		btn_profile1 = (Button) findViewById(R.id.buttonProfile1);
+		btn_profile2 = (Button) findViewById(R.id.buttonProfile2);
+		btn_profile3 = (Button) findViewById(R.id.buttonProfile3);
 
 		// radiobuttons tipologia poi
-		rbHotels = (RadioButton) findViewById(R.id.radioButton4);
-		rbRestaurants = (RadioButton) findViewById(R.id.radioButton5);
+		rbHotels 		= (RadioButton) findViewById(R.id.radioTypeHotel);
+		rbRestaurants 	= (RadioButton) findViewById(R.id.radioTypeRestaurant);
 
 		// bottone submit
-		startButton = (Button) findViewById(R.id.button1);
+		startButton = (Button) findViewById(R.id.buttonSearch);
 
 		
 		
@@ -126,51 +133,19 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				ControllerStartButton controllerStartButton = new ControllerStartButton();
-				// controlla il profilo scelto
-				if (rbProfile1.isSelected())
-				{
-					controllerStartButton.fillProfile();
-				} else if (rbProfile2.isSelected())
-				{
-					controllerStartButton.fillProfile();
-				} else if (rbProfile3.isSelected())
-				{
-					controllerStartButton.fillProfile();
-				}
 				
-
-
 				// controllo del tipo di Poi scelto
-				if (rbHotels.isSelected())
+				if (rbHotels.isChecked())
 				{
-					flagPoi = 0;
+					//flagPoi = 0;
 					hotel_chosen = true;
-				} else if (rbRestaurants.isSelected())
-				{
-					flagPoi = 1;
 				}
-
+				Log.v("scelto hotel"," "+hotel_chosen);
 				
-//				if(!rbProfile1.isSelected() && !rbProfile2.isSelected() && !rbProfile3.isSelected())
-//				{
-//				    Toast toast = Toast.makeText(MainActivity.this, "message", Toast.LENGTH_SHORT);
-//				    toast.setText("Nessun profilo selezionato");
-//				    toast.setDuration(Toast.LENGTH_LONG);
-//				    toast.show();
-//				}
-//				else if(!rbHotels.isSelected() && !rbRestaurants.isSelected())
-//				{
-//				    Toast toast = Toast.makeText(MainActivity.this, "message", Toast.LENGTH_SHORT);
-//				    toast.setText("Selezionare tipologia di PoI");
-//				    toast.setDuration(Toast.LENGTH_LONG);
-//				   
-//				    toast.show();
-//				}
-//				else {
+
 					// passa all'activity contenente la lista dei poi filtrati					
 					
-					Intent intent = new Intent(MainActivity.this, PoiDetailsActivity.class);
+					Intent intent = new Intent(NewMainActivity.this, PoiDetailsActivity.class);
 					intent.putExtra("typeChoice", hotel_chosen);
 					startActivity(intent);
 					finish();
@@ -180,8 +155,25 @@ public class MainActivity extends Activity
 
 			}
 		});
+		
+		
+		
+		//TODO controllo sui radiogroups
 
 	}
+	
+	
+	
+
+	@Override
+	protected void onResume()
+	{
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
@@ -213,7 +205,7 @@ public class MainActivity extends Activity
 	 */
 	private void createDialogForProfile(int idProfile)
 	{
-		dialog = new Dialog(MainActivity.this);
+		dialog = new Dialog(NewMainActivity.this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		dialog.setContentView(R.layout.custom_dialog);
@@ -287,7 +279,7 @@ public class MainActivity extends Activity
 	{
 		
 		String urlString = "http://10.220.176.242:5555/scorci/profile/" + id;
-
+		System.out.println("chiamata a: "+urlString);
 		//necessario per la connessione
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
@@ -319,5 +311,7 @@ public class MainActivity extends Activity
 		return profile.getMap().getCommercialProfile().toString();
 
 	}
-
+	
+	
+	
 }

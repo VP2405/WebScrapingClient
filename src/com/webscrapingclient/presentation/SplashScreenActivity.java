@@ -57,7 +57,7 @@ public class SplashScreenActivity extends Activity
 	            public void run() {
 	               
 	            	//passaggio all'activity successiva dopo la scadenza del timer
-	                Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
+	                Intent i = new Intent(SplashScreenActivity.this, NewMainActivity.class);
 	                startActivity(i);
 	 
 	                finish();

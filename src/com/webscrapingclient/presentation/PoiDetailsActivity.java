@@ -22,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 /**
@@ -31,11 +32,11 @@ import android.widget.TextView;
 public class PoiDetailsActivity extends Activity
 {
 	private ImageView logo;
-	private Dialog list_dialog;
+	private Dialog dialog;
 	private boolean isHotel = false;
 	private Button btn_detailsRating, btn_services, btn_policies, btn_next;
-	private ListViewAdapter adapter;
-	private TextView name, address, contacts, rating, reviews, avgPrice, cuisineDetails;
+	private RatingBar hotelRatingBar;
+	private TextView name, address, contacts, rating, reviews, avgPrice, cuisineDetails, stars;
 	private int id = 4;
 	private PoiJsonParser pjp;
 	
@@ -61,13 +62,15 @@ public class PoiDetailsActivity extends Activity
 		
 		
 		//view relative ai dettagli del poi
-		name 	= (TextView)findViewById(R.id.textView1);
-		address	= (TextView)findViewById(R.id.textView4);
-		contacts= (TextView)findViewById(R.id.textView3);
-		rating	= (TextView)findViewById(R.id.textView5);
-		reviews	= (TextView)findViewById(R.id.textView6);
-		avgPrice= (TextView)findViewById(R.id.textView2);
-		cuisineDetails= (TextView)findViewById(R.id.textView8);
+		name = (TextView) findViewById(R.id.textView1);
+		address = (TextView) findViewById(R.id.textView4);
+		contacts = (TextView) findViewById(R.id.textView3);
+		rating = (TextView) findViewById(R.id.textView5);
+		reviews = (TextView) findViewById(R.id.textView6);
+		avgPrice = (TextView) findViewById(R.id.textView2);
+		cuisineDetails = (TextView) findViewById(R.id.textView8);
+		stars = (TextView) findViewById(R.id.textView9);
+		hotelRatingBar = (RatingBar) findViewById(R.id.ratingBar1);
 		
 		//bottoni
 		btn_detailsRating 	= (Button)findViewById(R.id.button3);
@@ -75,7 +78,20 @@ public class PoiDetailsActivity extends Activity
 		btn_services		= (Button)findViewById(R.id.button2);
 		btn_next			= (Button)findViewById(R.id.button4);
 		
-		
+		/*
+		 * nel caso in cui venga effettuata una ricerca sui ristoranti,
+		 * occorre nascondere le view relative a:
+		 * - bottone per i dettagli del rating
+		 * - numero di stelle
+		 * - policies
+		 */		
+		if(!isHotel){
+			btn_detailsRating.setVisibility(View.INVISIBLE);
+			stars.setVisibility(View.INVISIBLE);
+			hotelRatingBar.setVisibility(View.INVISIBLE);
+			btn_policies.setVisibility(View.INVISIBLE);
+			
+		}		
 		
 		//riempimento dei vari campi con i dati del primo poi della lista
 		try
@@ -108,8 +124,9 @@ public class PoiDetailsActivity extends Activity
 			public void onClick(View v)
 			{
 				//apre una custom dialog con la lista dei rating per categoria
-				createDialog();
-    			list_dialog.setTitle("Dettagli Rating");
+				
+				//TODO gestire il caso degli hotel, dato che per i ristoranti non c'è la lista
+				createDialog("Rating Details", null);
     			
 
 				
@@ -172,6 +189,29 @@ public class PoiDetailsActivity extends Activity
 		});
 		
 	}
+	
+	
+	
+	
+	
+	
+
+	@Override
+	public void onBackPressed()
+	{
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		Intent intent = new Intent(PoiDetailsActivity.this, NewMainActivity.class);
+		startActivity(intent);
+		
+		
+	}
+
+
+
+
+
+
 
 	private void fillviews(PoiRestaurants restaurant)
 	{
@@ -205,17 +245,23 @@ public class PoiDetailsActivity extends Activity
 	
 	
 	
-	private void createDialog()
+	private void createDialog(String title, String msgString)
 	{
-		list_dialog = new Dialog(PoiDetailsActivity.this);
-		list_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		list_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-		list_dialog.setContentView(R.layout.custom_dialog);
+		dialog = new Dialog(PoiDetailsActivity.this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		dialog.setContentView(R.layout.custom_dialog);
 		
-		ListView list = (ListView)list_dialog.findViewById(R.layout.custom_dialog);
-		list.setAdapter(adapter);
+		// recupera il layout e setta titolo e testo del bottone
+		TextView title_dialog = (TextView) dialog.findViewById(R.id.dialog_title);
+		title_dialog.setText(title);
+		TextView text = (TextView) dialog.findViewById(R.id.message);
+		Button positiveButton = (Button) dialog.findViewById(R.id.positive_button);
+		positiveButton.setText("Ok");
 
-		Button positiveButton = (Button) list_dialog.findViewById(R.id.positive_button);
+		// setta informazioni del profilo sulla dialog
+		text.setText(msgString);
+
 		
 		
 		positiveButton.setOnClickListener(new OnClickListener(){
@@ -223,11 +269,11 @@ public class PoiDetailsActivity extends Activity
 			@Override
 			public void onClick(View arg0) {
 
-				list_dialog.dismiss();	
+				dialog.dismiss();	
 			}
 		});
 
-		list_dialog.show();	
+		dialog.show();	
 	}
 
 }
