@@ -1,4 +1,4 @@
-package poi;
+package com.webscrapingclient.json.map.poi;
 
 /**
  *Classe Service relativa ai servizi offerti da un Poi 

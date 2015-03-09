@@ -10,16 +10,21 @@ package com.webscrapingclient.presentation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.example.webscrapingclientandroid.R;
 import com.google.gson.Gson;
-import com.webscrapingclient.utils.CommercialProfile;
+import com.webscrapingclient.json.map.listprofiles.ListProfilesJson;
+import com.webscrapingclient.json.map.listprofiles.MapListProfiles;
+import com.webscrapingclient.json.map.profile.CommercialProfile;
+import com.webscrapingclient.json.map.profile.Profile;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -28,6 +33,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Window;
 import android.widget.TextView;
@@ -41,6 +47,7 @@ public class SplashScreenActivity extends Activity
 {
 	// Splash screen timer
     private static int TIME_OUT = 3000;
+    private MapListProfiles profilesList;
     private String tag = "SplashScreenActivity";
 	
 	
@@ -56,8 +63,23 @@ public class SplashScreenActivity extends Activity
 	            @Override
 	            public void run() {
 	               
+	            	try
+					{
+						profilesList = callRestServiceForListProfiles();
+					} catch (ClientProtocolException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	            	
+	            	
 	            	//passaggio all'activity successiva dopo la scadenza del timer
 	                Intent i = new Intent(SplashScreenActivity.this, NewMainActivity.class);
+	                i.putExtra("profilesList", profilesList);
 	                startActivity(i);
 	 
 	                finish();
@@ -137,6 +159,46 @@ public class SplashScreenActivity extends Activity
 //	        gson.fromJson(rd, Profile.class);
 //	        
 //		}
+	 
+	 
+	 
+	 private MapListProfiles callRestServiceForListProfiles() throws ClientProtocolException, IOException
+		{
+			
+			String urlString = "http://10.220.176.242:5555/scorci/profile/all";
+			System.out.println("chiamata a: "+urlString);
+			//necessario per la connessione
+			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+			StrictMode.setThreadPolicy(policy);
+
+			//crea richiesta http per accedere al servizio REST
+			HttpClient client = new DefaultHttpClient();
+
+			client.getParams().getParameter(ConnRoutePNames.DEFAULT_PROXY);
+
+			HttpGet request = new HttpGet(urlString.trim());
+			HttpResponse response = client.execute(request);
+
+			//recupera il json
+			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+			StringBuilder sbBuilder = new StringBuilder();
+			
+
+			String line = "";
+			while ((line = rd.readLine()) != null)
+			{
+				//System.out.println("JSON:"+line);
+				sbBuilder.append(line);
+			}
+
+			// deserializzazione del Json ricevuto in un oggetto di tipo Profile
+			Gson gson = new Gson();
+			ListProfilesJson list = gson.fromJson(sbBuilder.toString(), ListProfilesJson.class);
+
+			System.out.println(list.getMap().getAll_profiles_ids().size());
+			return list.getMap() ;
+
+		}
 	
 	
 }

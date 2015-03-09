@@ -36,10 +36,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.webscrapingclient.controller.*;
+import com.webscrapingclient.json.map.profile.CommercialProfile;
+import com.webscrapingclient.json.map.profile.Profile;
 import com.webscrapingclient.poi.jsonmanager.PoiJsonParser;
-import com.webscrapingclient.utils.CommercialProfile;
-import com.webscrapingclient.utils.Profile;
+
 
 public class MainActivity extends Activity
 {
@@ -126,18 +126,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				ControllerStartButton controllerStartButton = new ControllerStartButton();
-				// controlla il profilo scelto
-				if (rbProfile1.isSelected())
-				{
-					controllerStartButton.fillProfile();
-				} else if (rbProfile2.isSelected())
-				{
-					controllerStartButton.fillProfile();
-				} else if (rbProfile3.isSelected())
-				{
-					controllerStartButton.fillProfile();
-				}
+				
 				
 
 

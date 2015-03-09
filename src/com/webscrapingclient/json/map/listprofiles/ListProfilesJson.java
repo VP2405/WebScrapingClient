@@ -1,26 +1,15 @@
-/**
- * 
- */
-package com.webscrapingclient.utils;
+package com.webscrapingclient.json.map.listprofiles;
 
 /**
- * @author Vanessa
- *
+ * @author Vanessa 
+ * Classe esterna relativa al Json per il profilo utente
  */
-public class Profile
+
+public class ListProfilesJson
 {
-
 	private int status;
 	private String description;
-	private Map map;
-	
-	
-
-	@Override
-	public String toString()
-	{
-		return "Profile [status=" + status + ", description=" + description + ", map=" + map + "]";
-	}
+	private MapListProfiles map;
 
 	public int getStatus()
 	{
@@ -42,12 +31,12 @@ public class Profile
 		this.description = description;
 	}
 
-	public Map getMap()
+	public MapListProfiles getMap()
 	{
 		return map;
 	}
 
-	public void setMap(Map map)
+	public void setMap(MapListProfiles map)
 	{
 		this.map = map;
 	}

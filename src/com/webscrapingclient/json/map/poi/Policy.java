@@ -1,4 +1,4 @@
-package poi;
+package com.webscrapingclient.json.map.poi;
 
 /**
  * Classe Policy che rappresente le politiche che un Poi pu� attuare,quali ad esempio la possibilit� di fumare,

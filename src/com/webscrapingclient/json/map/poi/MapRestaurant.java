@@ -1,35 +1,33 @@
 /**
  * 
  */
-package com.webscrapingclient.poi.jsonmanager;
-
-import poi.Restaurant;
+package com.webscrapingclient.json.map.poi;
 
 /**
  * @author Vanessa
  *
- * Classe 'esterna' del json relativo ai ristoranti
+ *         Prima nested class del json relativo ai ristoranti
  *
  */
 public class MapRestaurant
 {
 
 	private Restaurant restaurant;
-	
+
 	/**
-	 * 
+	 * Costruttore
 	 */
-	public MapRestaurant()
+	public MapRestaurant(Restaurant restaurant)
 	{
-		// TODO Auto-generated constructor stub
+		super();
+		this.restaurant = restaurant;
 	}
-	
-	
-	
+
 	public Restaurant getRestaurant()
 	{
 		return restaurant;
 	}
+
 	public void setRestaurant(Restaurant restaurant)
 	{
 		this.restaurant = restaurant;

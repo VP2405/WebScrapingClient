@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.webscrapingclient.utils;
+package com.webscrapingclient.json.map.profile;
 
 /**
  * @author Vanessa

@@ -1,16 +1,16 @@
 /**
  * 
  */
-package com.webscrapingclient.utils;
+package com.webscrapingclient.json.map.profile;
 
 /**
- * @author Vanessa
+ * @author Vanessa Prima nested class relativa al Json per il recupero del
+ *         profilo utente
  *
  */
 public class Map
 {
 	private CommercialProfile commercialprofile;
-	
 
 	public CommercialProfile getCommercialProfile()
 	{
@@ -21,13 +21,5 @@ public class Map
 	{
 		this.commercialprofile = commercialProfile;
 	}
-
-	@Override
-	public String toString()
-	{
-		return "Map [commercialprofile=" + commercialprofile + "]";
-	}
-	
-	
 
 }

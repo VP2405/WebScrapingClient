@@ -1,4 +1,4 @@
-package poi;
+package com.webscrapingclient.json.map.poi;
 
 /**
  * Classe HotelRating che estende la classe Rating.	Comprende attributin aggiuntivi in base a determinati

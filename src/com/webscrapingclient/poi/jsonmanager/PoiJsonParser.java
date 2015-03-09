@@ -14,14 +14,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.os.StrictMode;
 
 import com.google.gson.Gson;
+import com.webscrapingclient.json.map.poi.PoiRestaurants;
 
 public class PoiJsonParser
 {
 	
 	private PoiRestaurants restaurant;
-	
-	
-	
 
 	public PoiJsonParser (int id) throws IllegalStateException, IOException{
 		

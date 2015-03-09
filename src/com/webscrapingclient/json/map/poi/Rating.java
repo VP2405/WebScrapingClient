@@ -1,4 +1,4 @@
-package poi;
+package com.webscrapingclient.json.map.poi;
 
 /**
  * La classe Rating � la classe astratta relativa alla votazione degli utenti sulle varie piattaforme dalle

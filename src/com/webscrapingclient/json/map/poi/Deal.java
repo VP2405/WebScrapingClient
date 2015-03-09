@@ -1,4 +1,4 @@
-package poi;
+package com.webscrapingclient.json.map.poi;
 
 /**
  * Classe Deal che corrisponde alle offerte periodiche 

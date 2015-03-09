@@ -1,7 +1,4 @@
-/**
- * 
- */
-package poi;
+package com.webscrapingclient.json.map.poi;
 
 /**
  * @author Vanessa
@@ -34,7 +31,5 @@ public class CookingType
 	{
 		return name;
 	}
-	
-	
 
 }

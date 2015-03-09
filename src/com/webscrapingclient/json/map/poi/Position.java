@@ -1,8 +1,8 @@
-package poi;
+package com.webscrapingclient.json.map.poi;
 
 /**
- * Classe Position che rappresenta la posizione del Poi. Essa è formata dalle coordinate geografiche,dall'indirizzo,
- * dal codice postale e dalla città
+ * Classe Position che rappresenta la posizione del Poi. Essa ï¿½ formata dalle coordinate geografiche,dall'indirizzo,
+ * dal codice postale e dalla cittï¿½
  * @author Andrea
  *
  */
@@ -105,7 +105,7 @@ public class Position {
 	}
 	
 	/**
-	 * Restituisce la città
+	 * Restituisce la cittï¿½
 	 * @return
 	 */
 	public String getCity() {
@@ -113,7 +113,7 @@ public class Position {
 	}
 
 	/**
-	 * Imposta la città
+	 * Imposta la cittï¿½
 	 * @param city
 	 */
 	public void setCity(String city) {
