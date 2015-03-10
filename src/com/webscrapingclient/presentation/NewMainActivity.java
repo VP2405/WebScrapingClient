@@ -38,6 +38,7 @@ import android.widget.TextView;
 import com.example.webscrapingclientandroid.R;
 import com.google.gson.Gson;
 import com.webscrapingclient.json.map.listprofiles.MapListProfiles;
+import com.webscrapingclient.json.map.orderedlist.OrderedListJson;
 import com.webscrapingclient.json.map.profile.CommercialProfile;
 import com.webscrapingclient.json.map.profile.Profile;
 
@@ -52,6 +53,7 @@ public class NewMainActivity extends Activity
 	private RadioGroup rGroupProfiles, rGroupTypes;
 	private RadioButton rbHotels, rbRestaurants;
 	private Button btn_profile1, startButton;
+	private TextView itemNumber;
 	private boolean hotel_chosen = false;
 	private int flagPoi; // vale 0 se viene scelto hotel, 1 se viene scelto
 							// ristoranti
@@ -71,6 +73,8 @@ public class NewMainActivity extends Activity
 
 		// recupero vista spinner per la scelta del profilo di test
 		spinner = new Spinner(this);
+		// itemNumber = (TextView)findViewById(R.id.textItemNUmber);
+
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item,
 				profilesList.getAll_profiles_ids());
@@ -119,6 +123,22 @@ public class NewMainActivity extends Activity
 				}
 				Log.v("scelto hotel", " " + hotel_chosen);
 
+				// chiama l'API /scorci/poi/profile/id per ottenere la lista dei
+				// poi relativi
+				choiceProfile = (Integer) spinner.getSelectedItem();
+//				try
+//				{
+//					callRestServiceForList(choiceProfile);
+//				} catch (ClientProtocolException e)
+//				{
+//
+//					e.printStackTrace();
+//				} catch (IOException e)
+//				{
+//
+//					e.printStackTrace();
+//				}
+
 				// passa all'activity contenente la lista dei poi filtrati
 
 				Intent intent = new Intent(NewMainActivity.this, PoiDetailsActivity.class);
@@ -129,9 +149,8 @@ public class NewMainActivity extends Activity
 				// }
 
 			}
-		});
 
-		// TODO controllo sui radiogroups
+		});
 
 	}
 
@@ -276,6 +295,40 @@ public class NewMainActivity extends Activity
 		Profile profile = gson.fromJson(sbBuilder.toString(), Profile.class);
 
 		return profile.getMap().getCommercialProfile().toString();
+
+	}
+
+	private void callRestServiceForList(Integer id) throws ClientProtocolException, IOException
+	{
+		String urlString = "http://10.220.176.242:5555/scorci/poi/profile/" + id;
+		System.out.println("chiamata a: " + urlString);
+
+		// necessario per la connessione da API 9 Android
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+		// crea richiesta http per accedere al servizio REST
+		HttpClient client = new DefaultHttpClient();
+
+		client.getParams().getParameter(ConnRoutePNames.DEFAULT_PROXY);
+
+		HttpGet request = new HttpGet(urlString.trim());
+		HttpResponse response = client.execute(request);
+
+		// recupera il json
+		BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+		StringBuilder sbBuilder = new StringBuilder();
+
+		String line = "";
+		while ((line = rd.readLine()) != null)
+		{
+			// System.out.println("JSON:"+line);
+			sbBuilder.append(line);
+		}
+
+		// deserializzazione del Json ricevuto in un oggetto di tipo Profile
+		Gson gson = new Gson();
+		OrderedListJson orderedList = gson.fromJson(sbBuilder.toString(), OrderedListJson.class);
 
 	}
 

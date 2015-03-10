@@ -4,13 +4,16 @@
 package com.webscrapingclient.presentation;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.example.webscrapingclientandroid.R;
 import com.webscrapingclient.json.map.poi.PoiRestaurants;
+import com.webscrapingclient.json.map.poi.Restaurant;
 import com.webscrapingclient.poi.jsonmanager.PoiJsonParser;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Service;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -36,9 +39,9 @@ public class PoiDetailsActivity extends Activity
 	private ImageView logo;
 	private Dialog dialog;
 	private boolean isHotel = false;
-	private Button btn_detailsRating, btn_services, btn_policies, btn_next;
+	private Button btn_detailsRating, btn_next;
 	private RatingBar hotelRatingBar;
-	private TextView name, address, contacts, rating, reviews, avgPrice, cuisineDetails, stars;
+	private TextView name, address, contacts, rating, reviews, avgPrice, cuisineDetails, stars, policies, services, policiesTitle;
 	private int id = 4;
 	private PoiJsonParser pjp;
 
@@ -75,11 +78,12 @@ public class PoiDetailsActivity extends Activity
 		cuisineDetails = (TextView) findViewById(R.id.textView8);
 		stars = (TextView) findViewById(R.id.textView9);
 		hotelRatingBar = (RatingBar) findViewById(R.id.ratingBar1);
+		services = (TextView) findViewById(R.id.textView11);
+		policiesTitle = (TextView) findViewById(R.id.textView12);
+		policies = (TextView) findViewById(R.id.textView13);
 
 		// bottoni
 		btn_detailsRating = (Button) findViewById(R.id.button3);
-		btn_policies = (Button) findViewById(R.id.button1);
-		btn_services = (Button) findViewById(R.id.button2);
 		btn_next = (Button) findViewById(R.id.button4);
 
 		/*
@@ -92,8 +96,8 @@ public class PoiDetailsActivity extends Activity
 			btn_detailsRating.setVisibility(View.INVISIBLE);
 			stars.setVisibility(View.INVISIBLE);
 			hotelRatingBar.setVisibility(View.INVISIBLE);
-			btn_policies.setVisibility(View.INVISIBLE);
-
+			policiesTitle.setVisibility(View.INVISIBLE);
+			policies.setVisibility(View.INVISIBLE);
 		}
 
 		// riempimento dei vari campi con i dati del primo poi della lista
@@ -102,11 +106,11 @@ public class PoiDetailsActivity extends Activity
 			pjp = new PoiJsonParser(id);
 		} catch (IllegalStateException e)
 		{
-			
+
 			e.printStackTrace();
 		} catch (IOException e)
 		{
-			
+
 			e.printStackTrace();
 		}
 
@@ -126,32 +130,6 @@ public class PoiDetailsActivity extends Activity
 				// TODO gestire il caso degli hotel, dato che per i ristoranti
 				// non c'è la lista
 				createDialog("Rating Details", null);
-
-			}
-		});
-
-		// listener bottone servizi
-		btn_services.setOnClickListener(new OnClickListener()
-		{
-
-			@Override
-			public void onClick(View v)
-			{
-				// apre una custom dialog con la lista di tutti i servizi del
-				// PoI
-
-			}
-		});
-
-		// listener bottone policies
-		btn_policies.setOnClickListener(new OnClickListener()
-		{
-
-			@Override
-			public void onClick(View v)
-			{
-				// apre una custom dialog con la lista di tutte le policies del
-				// PoI
 
 			}
 		});
@@ -195,8 +173,6 @@ public class PoiDetailsActivity extends Activity
 
 	}
 
-	
-	
 	private void fillviews(PoiRestaurants restaurant)
 	{
 		// TODO Auto-generated method stub
@@ -215,6 +191,13 @@ public class PoiDetailsActivity extends Activity
 		avgPrice.setText("Average Price: " + restaurant.getMap().getRestaurant().getAveragePrice());
 
 		cuisineDetails.setText(restaurant.getMap().getRestaurant().getCookingType().toString());
+		List<com.webscrapingclient.json.map.poi.Service> listServices = restaurant.getMap().getRestaurant().getServices();
+		if (!listServices.isEmpty())
+			services.setText(listServices.toString());
+		else
+			services.setText("");
+
+		policies.setText(restaurant.getMap().getRestaurant().getPolicies().toString());
 
 	}
 
@@ -224,7 +207,6 @@ public class PoiDetailsActivity extends Activity
 		super.onResume();
 	}
 
-	
 	private void createDialog(String title, String msgString)
 	{
 		dialog = new Dialog(PoiDetailsActivity.this);
