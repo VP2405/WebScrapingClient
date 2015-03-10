@@ -13,7 +13,6 @@ import com.webscrapingclient.json.map.poi.Restaurant;
  */
 public class OrderedListMap
 {
-
 	private ArrayList<Integer> orderedPoiIdsList;
 
 	public ArrayList<Integer> getOrderedPoiIdsList()

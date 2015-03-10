@@ -157,6 +157,8 @@ public class PoiDetailsActivity extends Activity
 				// // TODO Auto-generated catch block
 				// e.printStackTrace();
 				// }
+				Intent intent = new Intent(PoiDetailsActivity.this,PoiDetailsActivity.class);
+				startActivity(intent);
 
 			}
 		});

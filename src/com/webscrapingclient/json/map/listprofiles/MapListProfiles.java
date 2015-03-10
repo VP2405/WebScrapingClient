@@ -22,31 +22,31 @@ import android.os.Parcelable;
  */
 public class MapListProfiles implements Parcelable
 {
-	private ArrayList<Integer> allProfilesIds;
+	private ArrayList<Integer> all_profiles_ids;
 
 	public void addProfileId(CommercialProfile profile){
-		allProfilesIds.add(profile.getId());
+		all_profiles_ids.add(profile.getId());
 	}
 	
 	public ArrayList<Integer> getAllProfilesIds()
 	{
-		return allProfilesIds;
+		return all_profiles_ids;
 	}
 
 	public void setAllProfilesIds(ArrayList<Integer> allProfilesIds)
 	{
-		this.allProfilesIds = allProfilesIds;
+		this.all_profiles_ids = allProfilesIds;
 	}
 
 	protected MapListProfiles(Parcel in)
 	{
 		if (in.readByte() == 0x01)
 		{
-			allProfilesIds = new ArrayList<Integer>();
-			in.readList(allProfilesIds, Integer.class.getClassLoader());
+			all_profiles_ids = new ArrayList<Integer>();
+			in.readList(all_profiles_ids, Integer.class.getClassLoader());
 		} else
 		{
-			allProfilesIds = null;
+			all_profiles_ids = null;
 		}
 	}
 
@@ -59,13 +59,13 @@ public class MapListProfiles implements Parcelable
 	@Override
 	public void writeToParcel(Parcel dest, int flags)
 	{
-		if (allProfilesIds == null)
+		if (all_profiles_ids == null)
 		{
 			dest.writeByte((byte) (0x00));
 		} else
 		{
 			dest.writeByte((byte) (0x01));
-			dest.writeList(allProfilesIds);
+			dest.writeList(all_profiles_ids);
 		}
 	}
 

@@ -39,6 +39,7 @@ import com.example.webscrapingclientandroid.R;
 import com.google.gson.Gson;
 import com.webscrapingclient.json.map.listprofiles.MapListProfiles;
 import com.webscrapingclient.json.map.orderedlist.OrderedListJson;
+import com.webscrapingclient.json.map.orderedlist.OrderedListMap;
 import com.webscrapingclient.json.map.profile.CommercialProfile;
 import com.webscrapingclient.json.map.profile.Position;
 import com.webscrapingclient.json.map.profile.Profile;
@@ -61,6 +62,7 @@ public class NewMainActivity extends Activity
 	private Spinner spinner;
 	private Dialog dialog;
 	private MapListProfiles profilesList;
+	private OrderedListMap poiList;
 	private Integer choiceProfile;
 	private CommercialProfile testProfile;
 
@@ -308,7 +310,7 @@ public class NewMainActivity extends Activity
 
 	private void callRestServiceForList(Integer id) throws ClientProtocolException, IOException
 	{
-		String urlString = "http://10.220.176.242:5555/scorci/poi/profile/" + id;
+		String urlString = "http://192.168.1.5:8080/scorci/poi/profile/" + id;
 		System.out.println("chiamata a: " + urlString);
 
 		// necessario per la connessione da API 9 Android
@@ -337,7 +339,8 @@ public class NewMainActivity extends Activity
 		// deserializzazione del Json ricevuto in un oggetto di tipo Profile
 		Gson gson = new Gson();
 		OrderedListJson orderedList = gson.fromJson(sbBuilder.toString(), OrderedListJson.class);
-
+		poiList = orderedList.getMap();
+		System.out.println(poiList.getOrderedPoiIdsList());
 	}
 
 }

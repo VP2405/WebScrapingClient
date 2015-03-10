@@ -165,7 +165,7 @@ public class SplashScreenActivity extends Activity
 	 private MapListProfiles callRestServiceForListProfiles() throws ClientProtocolException, IOException
 		{
 			
-			String urlString = "http://10.220.176.242:5555/scorci/profile/all";
+			String urlString = "http://192.168.1.5:8080/scorci/profile/all";
 			System.out.println("chiamata a: "+urlString);
 			//necessario per la connessione
 			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -182,12 +182,12 @@ public class SplashScreenActivity extends Activity
 			//recupera il json
 			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 			StringBuilder sbBuilder = new StringBuilder();
-			
+			System.out.println("I'm Here!!!");
 
 			String line = "";
 			while ((line = rd.readLine()) != null)
 			{
-				//System.out.println("JSON:"+line);
+				System.out.println("JSON:"+line);
 				sbBuilder.append(line);
 			}
 
