@@ -14,15 +14,15 @@ import com.webscrapingclient.json.map.poi.Restaurant;
 public class OrderedListMap
 {
 
-	private ArrayList<Restaurant> ordered_poi_ids_list;
+	private ArrayList<Integer> orderedPoiIdsList;
 
-	public ArrayList<Restaurant> getOrderedPoiIdsList()
+	public ArrayList<Integer> getOrderedPoiIdsList()
 	{
-		return ordered_poi_ids_list;
+		return orderedPoiIdsList;
 	}
 
-	public void setOrderedPoiIdsList(ArrayList<Restaurant> ordered_poi_ids_list)
+	public void setOrderedPoiIdsList(ArrayList<Integer> ordered_poi_ids_list)
 	{
-		this.ordered_poi_ids_list = ordered_poi_ids_list;
+		this.orderedPoiIdsList = orderedPoiIdsList;
 	}
 }

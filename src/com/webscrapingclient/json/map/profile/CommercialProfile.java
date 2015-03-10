@@ -14,6 +14,19 @@ package com.webscrapingclient.json.map.profile;
 public class CommercialProfile
 {
 
+	public CommercialProfile(int id, int isMiser, String favouriteCuisine,
+			int isDemanding, double isDemandingPercentage,
+			double isMiserPercentage, Position lastPosition) {
+		super();
+		this.id = id;
+		this.isMiser = isMiser;
+		this.favouriteCuisine = favouriteCuisine;
+		this.isDemanding = isDemanding;
+		this.isDemandingPercentage = isDemandingPercentage;
+		this.isMiserPercentage = isMiserPercentage;
+		this.lastPosition = lastPosition;
+	}
+
 	private int id;
 	private int isMiser;
 	private String favouriteCuisine;

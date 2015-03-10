@@ -5,6 +5,9 @@ package com.webscrapingclient.json.map.listprofiles;
 
 import java.util.ArrayList;
 
+import com.webscrapingclient.json.map.profile.CommercialProfile;
+import com.webscrapingclient.json.map.profile.Profile;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -19,27 +22,31 @@ import android.os.Parcelable;
  */
 public class MapListProfiles implements Parcelable
 {
-	private ArrayList<Integer> all_profiles_ids;
+	private ArrayList<Integer> allProfilesIds;
 
-	public ArrayList<Integer> getAll_profiles_ids()
+	public void addProfileId(CommercialProfile profile){
+		allProfilesIds.add(profile.getId());
+	}
+	
+	public ArrayList<Integer> getAllProfilesIds()
 	{
-		return all_profiles_ids;
+		return allProfilesIds;
 	}
 
-	public void setAll_profiles_ids(ArrayList<Integer> all_profiles_ids)
+	public void setAllProfilesIds(ArrayList<Integer> allProfilesIds)
 	{
-		this.all_profiles_ids = all_profiles_ids;
+		this.allProfilesIds = allProfilesIds;
 	}
 
 	protected MapListProfiles(Parcel in)
 	{
 		if (in.readByte() == 0x01)
 		{
-			all_profiles_ids = new ArrayList<Integer>();
-			in.readList(all_profiles_ids, Integer.class.getClassLoader());
+			allProfilesIds = new ArrayList<Integer>();
+			in.readList(allProfilesIds, Integer.class.getClassLoader());
 		} else
 		{
-			all_profiles_ids = null;
+			allProfilesIds = null;
 		}
 	}
 
@@ -52,13 +59,13 @@ public class MapListProfiles implements Parcelable
 	@Override
 	public void writeToParcel(Parcel dest, int flags)
 	{
-		if (all_profiles_ids == null)
+		if (allProfilesIds == null)
 		{
 			dest.writeByte((byte) (0x00));
 		} else
 		{
 			dest.writeByte((byte) (0x01));
-			dest.writeList(all_profiles_ids);
+			dest.writeList(allProfilesIds);
 		}
 	}
 

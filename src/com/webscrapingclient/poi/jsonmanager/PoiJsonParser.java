@@ -23,7 +23,7 @@ public class PoiJsonParser
 
 	public PoiJsonParser (int id) throws IllegalStateException, IOException{
 		
-		String urlString = "http://10.220.176.242:5555/scorci/poi/"+id;
+		String urlString = "http://192.168.1.5:8080/scorci/poi/"+id;
 
 		//necessario per la connessione
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

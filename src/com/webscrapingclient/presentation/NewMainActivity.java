@@ -40,6 +40,7 @@ import com.google.gson.Gson;
 import com.webscrapingclient.json.map.listprofiles.MapListProfiles;
 import com.webscrapingclient.json.map.orderedlist.OrderedListJson;
 import com.webscrapingclient.json.map.profile.CommercialProfile;
+import com.webscrapingclient.json.map.profile.Position;
 import com.webscrapingclient.json.map.profile.Profile;
 
 /**
@@ -61,6 +62,7 @@ public class NewMainActivity extends Activity
 	private Dialog dialog;
 	private MapListProfiles profilesList;
 	private Integer choiceProfile;
+	private CommercialProfile testProfile;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -69,15 +71,19 @@ public class NewMainActivity extends Activity
 		setContentView(R.layout.activity_main_spinner);
 		Intent intent = getIntent();
 		profilesList = intent.getExtras().getParcelable("profilesList");
-		System.out.println(profilesList.getAll_profiles_ids());
-
+		System.out.println(profilesList.getAllProfilesIds());
+		
+		testProfile = new CommercialProfile(12,3,"Cinese",3,20.0,20.0,new Position(41.855805,12.6253663));  
 		// recupero vista spinner per la scelta del profilo di test
+		profilesList.addProfileId(testProfile);
+		System.out.println(profilesList.getAllProfilesIds());
+		
 		spinner = new Spinner(this);
 		// itemNumber = (TextView)findViewById(R.id.textItemNUmber);
 
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item,
-				profilesList.getAll_profiles_ids());
+				profilesList.getAllProfilesIds());
 		spinner.setAdapter(spinnerAdapter);
 
 		// bottone visualizzazione dettagli profilo scelto nello spinner
@@ -204,8 +210,11 @@ public class NewMainActivity extends Activity
 		positiveButton.setText("Ok");
 
 		// setta informazioni del profilo sulla dialog
-		text.setText(setProfileInformation(idProfile));
-
+		if(idProfile!=12){	
+			text.setText(setProfileInformation(idProfile));
+		}
+		else
+			text.setText(testProfile.toString());
 		// listener per la chiusura della dialog
 		positiveButton.setOnClickListener(new OnClickListener()
 		{
@@ -237,14 +246,13 @@ public class NewMainActivity extends Activity
 			// profilo
 			responseJsonString = callRestServiceForProfile(id);
 
-		} catch (ClientProtocolException e)
-		{
+		} 
+		catch (ClientProtocolException e){
 			e.printStackTrace();
-		} catch (IOException e)
-		{
+		} 
+		catch (IOException e){
 			e.printStackTrace();
 		}
-
 		return responseJsonString;
 
 	}
@@ -264,7 +272,7 @@ public class NewMainActivity extends Activity
 	private String callRestServiceForProfile(int id) throws ClientProtocolException, IOException
 	{
 
-		String urlString = "http://10.220.176.242:5555/scorci/profile/" + id;
+		String urlString = "http://192.168.1.5:8080/scorci/profile/" + id;
 		System.out.println("chiamata a: " + urlString);
 
 		// necessario per la connessione da API 9 Android

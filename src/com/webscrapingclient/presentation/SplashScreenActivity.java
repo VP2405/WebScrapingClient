@@ -195,7 +195,7 @@ public class SplashScreenActivity extends Activity
 			Gson gson = new Gson();
 			ListProfilesJson list = gson.fromJson(sbBuilder.toString(), ListProfilesJson.class);
 
-			System.out.println(list.getMap().getAll_profiles_ids().size());
+			System.out.println(list.getMap().getAllProfilesIds().size());
 			return list.getMap() ;
 
 		}

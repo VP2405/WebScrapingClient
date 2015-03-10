@@ -9,6 +9,12 @@ package com.webscrapingclient.json.map.profile;
  */
 public class Position
 {
+	public Position(double latitude, double longitude) {
+		super();
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+
 	private double latitude;
 	private double longitude;
 	
