@@ -85,7 +85,12 @@ public class PoiDetailsActivity extends Activity
 		// bottoni
 		btn_detailsRating = (Button) findViewById(R.id.button3);
 		btn_next = (Button) findViewById(R.id.button4);
-
+		int sizePoiList = poiList.getOrdered_restaurants_ids_list().size();
+		System.out.println("IndexList = " + indexList + "sizePoiList = "+sizePoiList);
+		if(sizePoiList -1 == indexList){
+			System.out.println(sizePoiList + "=" + indexList);
+			btn_next.setVisibility(View.INVISIBLE);
+		}
 		/*
 		 * nel caso in cui venga effettuata una ricerca sui ristoranti, occorre
 		 * nascondere le view relative a: - bottone per i dettagli del rating -
@@ -177,8 +182,12 @@ public class PoiDetailsActivity extends Activity
 
 		rating.setText("Rating: " + restaurant.getMap().getRestaurant().getRating().getValue());
 		reviews.setText("Reviews: " + restaurant.getMap().getRestaurant().getRating().getReview());
-		avgPrice.setText("Average Price: " + restaurant.getMap().getRestaurant().getAveragePrice());
-
+		if(!restaurant.getMap().getRestaurant().getAveragePrice().equals("0")){
+			avgPrice.setText("Average Price: " + restaurant.getMap().getRestaurant().getAveragePrice());
+		}
+		else
+			avgPrice.setText("Average Price: N/A");
+		
 		cuisineDetails.setText(restaurant.getMap().getRestaurant().getCookingType().toString());
 		List<com.webscrapingclient.json.map.poi.Service> listServices = restaurant.getMap().getRestaurant().getServices();
 		if (!listServices.isEmpty())
