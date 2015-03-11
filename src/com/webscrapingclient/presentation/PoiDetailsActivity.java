@@ -9,7 +9,7 @@ import java.util.List;
 import com.example.webscrapingclientandroid.R;
 import com.webscrapingclient.json.map.orderedlist.OrderedListMap;
 import com.webscrapingclient.json.map.poi.PoiRestaurants;
-import com.webscrapingclient.poi.jsonmanager.PoiJsonParser;
+import com.webscrapingclient.restservice.CallRestService;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -41,7 +41,7 @@ public class PoiDetailsActivity extends Activity
 	private RatingBar hotelRatingBar;
 	private TextView name, address, contacts, rating, reviews, avgPrice, cuisineDetails, stars, policies, services, policiesTitle;
 	private int indexList;
-	private PoiJsonParser pjp;
+	private CallRestService poiRestService;
 	private OrderedListMap poiList;
 
 	@Override
@@ -103,9 +103,10 @@ public class PoiDetailsActivity extends Activity
 		// riempimento dei vari campi con i dati del primo poi della lista
 		try
 		{
-			System.out.println("ciao"+poiList.getOrdered_restaurants_ids_list());
+			System.out.println(poiList.getOrdered_restaurants_ids_list());
 			System.out.println("");
-			pjp = new PoiJsonParser(poiList.getOrdered_restaurants_ids_list().get(indexList));
+			poiRestService = new CallRestService();
+			poiRestService.callRestServiceForPoi(poiList.getOrdered_restaurants_ids_list().get(indexList));
 		} catch (IllegalStateException e)
 		{
 
@@ -116,7 +117,7 @@ public class PoiDetailsActivity extends Activity
 			e.printStackTrace();
 		}
 
-		PoiRestaurants restaurant = pjp.getRestaurant();
+		PoiRestaurants restaurant = poiRestService.getRestaurant();
 
 		fillviews(restaurant);
 

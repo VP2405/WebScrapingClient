@@ -25,6 +25,7 @@ import com.webscrapingclient.json.map.listprofiles.ListProfilesJson;
 import com.webscrapingclient.json.map.listprofiles.MapListProfiles;
 import com.webscrapingclient.json.map.profile.CommercialProfile;
 import com.webscrapingclient.json.map.profile.Profile;
+import com.webscrapingclient.restservice.CallRestService;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -65,7 +66,8 @@ public class SplashScreenActivity extends Activity
 	               
 	            	try
 					{
-						profilesList = callRestServiceForListProfiles();
+	            		CallRestService callRestService = new CallRestService();
+	            		profilesList = callRestService.callRestServiceForListProfiles();
 					} catch (ClientProtocolException e)
 					{
 						// TODO Auto-generated catch block
@@ -160,45 +162,6 @@ public class SplashScreenActivity extends Activity
 //	        
 //		}
 	 
-	 
-	 
-	 private MapListProfiles callRestServiceForListProfiles() throws ClientProtocolException, IOException
-		{
-			
-			String urlString = "http://192.168.1.102:5555/scorci/profile/all";
-			System.out.println("chiamata a: "+urlString);
-			//necessario per la connessione
-			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-			StrictMode.setThreadPolicy(policy);
 
-			//crea richiesta http per accedere al servizio REST
-			HttpClient client = new DefaultHttpClient();
-
-			client.getParams().getParameter(ConnRoutePNames.DEFAULT_PROXY);
-
-			HttpGet request = new HttpGet(urlString.trim());
-			HttpResponse response = client.execute(request);
-
-			//recupera il json
-			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-			StringBuilder sbBuilder = new StringBuilder();
-			//System.out.println("I'm Here!!!");
-
-			String line = "";
-			while ((line = rd.readLine()) != null)
-			{
-				System.out.println("JSON:"+line);
-				sbBuilder.append(line);
-			}
-
-			// deserializzazione del Json ricevuto in un oggetto di tipo Profile
-			Gson gson = new Gson();
-			ListProfilesJson list = gson.fromJson(sbBuilder.toString(), ListProfilesJson.class);
-
-			System.out.println(list.getMap().getAllProfilesIds().size());
-			return list.getMap() ;
-
-		}
-	
 	
 }

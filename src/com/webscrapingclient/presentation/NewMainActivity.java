@@ -3,17 +3,10 @@
  */
 package com.webscrapingclient.presentation;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
 
-import org.apache.http.HttpResponse;
+import java.io.IOException;
+
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -21,7 +14,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,13 +28,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.webscrapingclientandroid.R;
-import com.google.gson.Gson;
 import com.webscrapingclient.json.map.listprofiles.MapListProfiles;
-import com.webscrapingclient.json.map.orderedlist.OrderedListJson;
 import com.webscrapingclient.json.map.orderedlist.OrderedListMap;
 import com.webscrapingclient.json.map.profile.CommercialProfile;
 import com.webscrapingclient.json.map.profile.Position;
-import com.webscrapingclient.json.map.profile.Profile;
+import com.webscrapingclient.restservice.CallRestService;
 
 /**
  * @author Vanessa Activity relativa alla scelta del profilo utente di test e
@@ -137,12 +127,14 @@ public class NewMainActivity extends Activity
 				choiceProfile = (Integer) spinner.getSelectedItem();
 				try
 				{
-					callRestServiceForList(choiceProfile);
-				} catch (ClientProtocolException e)
+					CallRestService callRestService = new CallRestService();
+					poiList = callRestService.callRestServiceForList(choiceProfile);
+				} 
+				catch (ClientProtocolException e)
 				{
-
 					e.printStackTrace();
-				} catch (IOException e)
+				}
+				catch (IOException e)
 				{
 
 					e.printStackTrace();
@@ -237,7 +229,7 @@ public class NewMainActivity extends Activity
 	 * input.
 	 * 
 	 * @param id
-	 *            id del profilo da visualizzare, corrisponde alla posizione in
+	 *  		  id del profilo da visualizzare, corrisponde alla posizione in
 	 *            lista
 	 * @return un oggetto di tipo String contenente i dettagli del profilo, in
 	 *         modo che essi possano essere visualizzati nella dialog relativa
@@ -249,7 +241,8 @@ public class NewMainActivity extends Activity
 		{
 			// chiamata all'api REST per l'ottenimento del Json relativo al
 			// profilo
-			responseJsonString = callRestServiceForProfile(id);
+			CallRestService callRestService = new CallRestService();
+			responseJsonString = callRestService.callRestServiceForProfile(id);
 
 		} 
 		catch (ClientProtocolException e){
@@ -260,90 +253,6 @@ public class NewMainActivity extends Activity
 		}
 		return responseJsonString;
 
-	}
-
-	/**
-	 * Richiama il servizio rest utilizzando un client Apache Http per ottenere
-	 * i profili in formato JSON, e parsarli tramite Gson in modo da creare un
-	 * oggetto di tipo Profile, da cui poter successivamente recuperare le
-	 * informazioni per la loro visualizzazione
-	 * 
-	 * @param id
-	 *            id del profilo scelto
-	 * 
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 */
-	private String callRestServiceForProfile(int id) throws ClientProtocolException, IOException
-	{
-
-		String urlString = "http://192.168.1.102:5555/scorci/profile/" + id;
-		System.out.println("chiamata a: " + urlString);
-
-		// necessario per la connessione da API 9 Android
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-
-		// crea richiesta http per accedere al servizio REST
-		HttpClient client = new DefaultHttpClient();
-
-		client.getParams().getParameter(ConnRoutePNames.DEFAULT_PROXY);
-
-		HttpGet request = new HttpGet(urlString.trim());
-		HttpResponse response = client.execute(request);
-
-		// recupera il json
-		BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-		StringBuilder sbBuilder = new StringBuilder();
-
-		String line = "";
-		while ((line = rd.readLine()) != null)
-		{
-			// System.out.println("JSON:"+line);
-			sbBuilder.append(line);
-		}
-
-		// deserializzazione del Json ricevuto in un oggetto di tipo Profile
-		Gson gson = new Gson();
-		Profile profile = gson.fromJson(sbBuilder.toString(), Profile.class);
-
-		return profile.getMap().getCommercialProfile().toString();
-
-	}
-
-	private void callRestServiceForList(Integer id) throws ClientProtocolException, IOException
-	{
-		String urlString = "http://192.168.1.102:5555/scorci/poi/profile/" + id;
-		System.out.println("chiamata a: " + urlString);
-
-		// necessario per la connessione da API 9 Android
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-
-		// crea richiesta http per accedere al servizio REST
-		HttpClient client = new DefaultHttpClient();
-
-		client.getParams().getParameter(ConnRoutePNames.DEFAULT_PROXY);
-
-		HttpGet request = new HttpGet(urlString.trim());
-		HttpResponse response = client.execute(request);
-
-		// recupera il json
-		BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-		StringBuilder sbBuilder = new StringBuilder();
-
-		String line = "";
-		while ((line = rd.readLine()) != null)
-		{
-			// System.out.println("JSON:"+line);
-			sbBuilder.append(line);
-		}
-
-		// deserializzazione del Json ricevuto in un oggetto di tipo Profile
-		Gson gson = new Gson();
-		OrderedListJson orderedList = gson.fromJson(sbBuilder.toString(), OrderedListJson.class);
-		poiList = orderedList.getMap();
-		System.out.println("NewMainActivity: lista: "+poiList.getOrdered_restaurants_ids_list());
 	}
 
 }
