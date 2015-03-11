@@ -7,13 +7,12 @@ import java.io.IOException;
 import java.util.List;
 
 import com.example.webscrapingclientandroid.R;
+import com.webscrapingclient.json.map.orderedlist.OrderedListMap;
 import com.webscrapingclient.json.map.poi.PoiRestaurants;
-import com.webscrapingclient.json.map.poi.Restaurant;
 import com.webscrapingclient.poi.jsonmanager.PoiJsonParser;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Service;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -23,7 +22,6 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -42,15 +40,15 @@ public class PoiDetailsActivity extends Activity
 	private Button btn_detailsRating, btn_next;
 	private RatingBar hotelRatingBar;
 	private TextView name, address, contacts, rating, reviews, avgPrice, cuisineDetails, stars, policies, services, policiesTitle;
-	private int id = 4;
+	private int indexList;
 	private PoiJsonParser pjp;
+	private OrderedListMap poiList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.details_view);
+		setContentView(R.layout.details_activity);
 
 		/*
 		 * controlla se la ricerca è basata su hotel o ristoranti, recuperando
@@ -58,6 +56,8 @@ public class PoiDetailsActivity extends Activity
 		 */
 		Intent intent = getIntent();
 		isHotel = intent.getExtras().getBoolean("typeChoice");
+		indexList = intent.getExtras().getInt("indexList");
+		poiList = intent.getExtras().getParcelable("poiList");
 
 		// recupero viste e settaggio informazioni
 		logo = (ImageView) findViewById(R.id.imageView1);
@@ -103,7 +103,9 @@ public class PoiDetailsActivity extends Activity
 		// riempimento dei vari campi con i dati del primo poi della lista
 		try
 		{
-			pjp = new PoiJsonParser(id);
+			System.out.println("ciao"+poiList.getOrdered_restaurants_ids_list());
+			System.out.println("");
+			pjp = new PoiJsonParser(poiList.getOrdered_restaurants_ids_list().get(indexList));
 		} catch (IllegalStateException e)
 		{
 
@@ -126,9 +128,6 @@ public class PoiDetailsActivity extends Activity
 			public void onClick(View v)
 			{
 				// apre una custom dialog con la lista dei rating per categoria
-
-				// TODO gestire il caso degli hotel, dato che per i ristoranti
-				// non c'è la lista
 				createDialog("Rating Details", null);
 
 			}
@@ -137,27 +136,15 @@ public class PoiDetailsActivity extends Activity
 		btn_next.setOnClickListener(new OnClickListener()
 		{
 
+
 			@Override
 			public void onClick(View v)
 			{
 				/*
-				 * nuova chiamata al servizio rest con id incrementato in modo
-				 * da ottere e parsare il poi successivo in base all'ordine di
-				 * pertinenza con il profilo utente scelto
 				 */
-				// try
-				// {
-				// PoiJsonParser pjp = new PoiJsonParser(id+1);
-				// } catch (IllegalStateException e)
-				// {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// } catch (IOException e)
-				// {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// }
 				Intent intent = new Intent(PoiDetailsActivity.this,PoiDetailsActivity.class);
+				intent.putExtra("indexList", indexList+1);
+				intent.putExtra("poiList", poiList);
 				startActivity(intent);
 
 			}
@@ -168,7 +155,6 @@ public class PoiDetailsActivity extends Activity
 	@Override
 	public void onBackPressed()
 	{
-		// TODO Auto-generated method stub
 		super.onBackPressed();
 		Intent intent = new Intent(PoiDetailsActivity.this, NewMainActivity.class);
 		startActivity(intent);
@@ -177,7 +163,7 @@ public class PoiDetailsActivity extends Activity
 
 	private void fillviews(PoiRestaurants restaurant)
 	{
-		// TODO Auto-generated method stub
+		
 		name.setText(restaurant.getMap().getRestaurant().getName());
 		address.setText(restaurant.getMap().getRestaurant().getPosition().getAddress() + " "
 				+ restaurant.getMap().getRestaurant().getPosition().getZipCode() + ", " + restaurant.getMap().getRestaurant().getPosition().getCity()

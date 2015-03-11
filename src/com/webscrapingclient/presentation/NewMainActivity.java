@@ -65,12 +65,13 @@ public class NewMainActivity extends Activity
 	private OrderedListMap poiList;
 	private Integer choiceProfile;
 	private CommercialProfile testProfile;
+	private int indexList = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main_spinner);
+		setContentView(R.layout.activity_main);
 		Intent intent = getIntent();
 		profilesList = intent.getExtras().getParcelable("profilesList");
 		System.out.println(profilesList.getAllProfilesIds());
@@ -134,23 +135,26 @@ public class NewMainActivity extends Activity
 				// chiama l'API /scorci/poi/profile/id per ottenere la lista dei
 				// poi relativi
 				choiceProfile = (Integer) spinner.getSelectedItem();
-//				try
-//				{
-//					callRestServiceForList(choiceProfile);
-//				} catch (ClientProtocolException e)
-//				{
-//
-//					e.printStackTrace();
-//				} catch (IOException e)
-//				{
-//
-//					e.printStackTrace();
-//				}
+				try
+				{
+					callRestServiceForList(choiceProfile);
+				} catch (ClientProtocolException e)
+				{
+
+					e.printStackTrace();
+				} catch (IOException e)
+				{
+
+					e.printStackTrace();
+				}
 
 				// passa all'activity contenente la lista dei poi filtrati
 
 				Intent intent = new Intent(NewMainActivity.this, PoiDetailsActivity.class);
 				intent.putExtra("typeChoice", hotel_chosen);
+				//indexList = poiList.getOrderedPoiIdsList().get(0);
+				intent.putExtra("indexList", indexList);
+				intent.putExtra("poiList", poiList);
 				startActivity(intent);
 				finish();
 
@@ -165,7 +169,6 @@ public class NewMainActivity extends Activity
 	@Override
 	protected void onResume()
 	{
-		// TODO Auto-generated method stub
 		super.onResume();
 	}
 
@@ -274,7 +277,7 @@ public class NewMainActivity extends Activity
 	private String callRestServiceForProfile(int id) throws ClientProtocolException, IOException
 	{
 
-		String urlString = "http://192.168.1.5:8080/scorci/profile/" + id;
+		String urlString = "http://192.168.1.102:5555/scorci/profile/" + id;
 		System.out.println("chiamata a: " + urlString);
 
 		// necessario per la connessione da API 9 Android
@@ -310,7 +313,7 @@ public class NewMainActivity extends Activity
 
 	private void callRestServiceForList(Integer id) throws ClientProtocolException, IOException
 	{
-		String urlString = "http://192.168.1.5:8080/scorci/poi/profile/" + id;
+		String urlString = "http://192.168.1.102:5555/scorci/poi/profile/" + id;
 		System.out.println("chiamata a: " + urlString);
 
 		// necessario per la connessione da API 9 Android
@@ -340,7 +343,7 @@ public class NewMainActivity extends Activity
 		Gson gson = new Gson();
 		OrderedListJson orderedList = gson.fromJson(sbBuilder.toString(), OrderedListJson.class);
 		poiList = orderedList.getMap();
-		System.out.println(poiList.getOrderedPoiIdsList());
+		System.out.println("NewMainActivity: lista: "+poiList.getOrdered_restaurants_ids_list());
 	}
 
 }
