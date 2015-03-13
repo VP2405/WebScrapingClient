@@ -47,7 +47,7 @@ public class PoiDetailsActivity extends Activity
 	private boolean isHotel = false;
 	private Button btn_detailsRating, btn_next, btn_previous, btn_home;
 	private RatingBar hotelRatingBar;
-	private TextView name, address, contacts, rating, reviews, avgPrice, cuisineDetails, stars, policies, services, policiesTitle;
+	private TextView name, address, contacts, website,email,rating, reviews, avgPrice, cuisineDetails, stars, policies, services, policiesTitle;
 	private int indexList;
 	private MapListProfiles profilesList;
 	private CallRestService poiRestService;
@@ -83,6 +83,8 @@ public class PoiDetailsActivity extends Activity
 		name = (TextView) findViewById(R.id.textView1);
 		address = (TextView) findViewById(R.id.textView4);
 		contacts = (TextView) findViewById(R.id.textView3);
+		website = (TextView) findViewById(R.id.textView14);
+		email = (TextView) findViewById(R.id.textView15);
 		rating = (TextView) findViewById(R.id.textView5);
 		reviews = (TextView) findViewById(R.id.textView6);
 		avgPrice = (TextView) findViewById(R.id.textView2);
@@ -253,12 +255,17 @@ public class PoiDetailsActivity extends Activity
 				+ restaurant.getMap().getRestaurant().getPosition().getLongitude() + "]");
 
 		List<String> telephoneNumberString = trimTelephoneNumber(restaurant.getMap().getRestaurant().getContact().getTelephoneNumber());
-		contacts.setText("Website: " + restaurant.getMap().getRestaurant().getContact().getWebsite() + "\n" + "Email: "
-				+ restaurant.getMap().getRestaurant().getContact().getEmail() + "\n"
-				+ "Telephone Number: "+telephoneNumberString);
-
+		
+		if(telephoneNumberString.isEmpty())
+			contacts.setVisibility(View.INVISIBLE);
+		else
+			contacts.setText("Telephone Number: " + telephoneNumberString);
+		
+		website.setText(restaurant.getMap().getRestaurant().getContact().getWebsite());
+		email.setText(restaurant.getMap().getRestaurant().getContact().getEmail());
 		rating.setText("Rating: " + restaurant.getMap().getRestaurant().getRating().getValue());
 		reviews.setText("Reviews: " + restaurant.getMap().getRestaurant().getRating().getReview());
+		
 		if (!restaurant.getMap().getRestaurant().getAveragePrice().equals("0"))
 		{
 			avgPrice.setText("Average Price: " + restaurant.getMap().getRestaurant().getAveragePrice());
