@@ -3,13 +3,13 @@
  */
 package com.webscrapingclient.presentation;
 
-
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.example.webscrapingclientandroid.R;
@@ -33,6 +34,7 @@ import com.webscrapingclient.json.map.orderedlist.OrderedListMap;
 import com.webscrapingclient.json.map.profile.CommercialProfile;
 import com.webscrapingclient.json.map.profile.Position;
 import com.webscrapingclient.restservice.CallRestService;
+import com.webscrapingclient.utils.SpinnerItemAdapter;
 
 /**
  * @author Vanessa Activity relativa alla scelta del profilo utente di test e
@@ -65,18 +67,22 @@ public class NewMainActivity extends Activity
 		Intent intent = getIntent();
 		profilesList = intent.getExtras().getParcelable("profilesList");
 		System.out.println(profilesList.getAllProfilesIds());
-		
-		testProfile = new CommercialProfile(12,3,"Cinese",3,20.0,20.0,new Position(41.855805,12.6253663));  
+
+	//	testProfile = new CommercialProfile(12, 3, "Cinese", 3, 20.0, 20.0, new Position(41.855805, 12.6253663));
 		// recupero vista spinner per la scelta del profilo di test
-		profilesList.addProfileId(testProfile);
+	//	profilesList.addProfileId(testProfile);
 		System.out.println(profilesList.getAllProfilesIds());
-		
+
 		spinner = new Spinner(this);
 		// itemNumber = (TextView)findViewById(R.id.textItemNUmber);
 
 		spinner = (Spinner) findViewById(R.id.spinner1);
-		ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item,
-				profilesList.getAllProfilesIds());
+		// ArrayAdapter<Integer> spinnerAdapter = new
+		// ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item,
+		// profilesList.getAllProfilesIds());
+		// spinner.setAdapter(spinnerAdapter);
+
+		SpinnerItemAdapter spinnerAdapter = new SpinnerItemAdapter(NewMainActivity.this, R.layout.spinner_item, profilesList.getAllProfilesIds());
 		spinner.setAdapter(spinnerAdapter);
 
 		// bottone visualizzazione dettagli profilo scelto nello spinner
@@ -119,38 +125,87 @@ public class NewMainActivity extends Activity
 				{
 					// flagPoi = 0;
 					hotel_chosen = true;
+					createAlertDialog();
+				} else
+				{
+					hotel_chosen = false;
 				}
 				Log.v("scelto hotel", " " + hotel_chosen);
 
 				// chiama l'API /scorci/poi/profile/id per ottenere la lista dei
 				// poi relativi
+				final ProgressDialog progress = new ProgressDialog(NewMainActivity.this);
 				choiceProfile = (Integer) spinner.getSelectedItem();
 				try
 				{
+					progress.requestWindowFeature(Window.FEATURE_PROGRESS);
+					progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+					progress.show();
+					progress.setContentView(R.layout.custom_pd);
+					progress.setTitle(null);
+					TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+					text.setText("Recupero profili in corso..");
+					progress.setIndeterminate(true);
+					progress.setCancelable(false);
+					
+					
 					CallRestService callRestService = new CallRestService();
 					poiList = callRestService.callRestServiceForList(choiceProfile);
-				} 
-				catch (ClientProtocolException e)
+				} catch (ClientProtocolException e)
 				{
 					e.printStackTrace();
-				}
-				catch (IOException e)
+				} catch (IOException e)
 				{
 
 					e.printStackTrace();
 				}
 
-				// passa all'activity contenente la lista dei poi filtrati
-
-				Intent intent = new Intent(NewMainActivity.this, PoiDetailsActivity.class);
-				intent.putExtra("typeChoice", hotel_chosen);
-				//indexList = poiList.getOrderedPoiIdsList().get(0);
-				intent.putExtra("indexList", indexList);
-				intent.putExtra("poiList", poiList);
-				startActivity(intent);
-				finish();
+				/*
+				 * passa all'activity contenente la lista dei poi filtrati solo
+				 * se si vogliono visualizzare i ristoranti, dato che gli hotel
+				 * non sono recuperabili
+				 */
+				if (!hotel_chosen)
+				{
+					Intent intent = new Intent(NewMainActivity.this, PoiDetailsActivity.class);
+					intent.putExtra("typeChoice", hotel_chosen);
+					intent.putExtra("indexList", indexList);
+					intent.putExtra("poiList", poiList);
+					startActivity(intent);
+					finish();
+					progress.cancel();
+				}
 
 				// }
+
+			}
+
+			private void createAlertDialog()
+			{
+				// TODO Auto-generated method stub
+				dialog = new Dialog(NewMainActivity.this);
+				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				dialog.setContentView(R.layout.custom_dialog);
+
+				// recupera il layout e setta titolo e testo del bottone
+				TextView title_dialog = (TextView) dialog.findViewById(R.id.dialog_title);
+				title_dialog.setText("Warning");
+				TextView text = (TextView) dialog.findViewById(R.id.message);
+				text.setText("Cannot retrieve data for Hotels.\nPlease search only for Restaurants.");
+				Button positiveButton = (Button) dialog.findViewById(R.id.positive_button);
+				positiveButton.setText("Ok");
+				
+				//listener per il bottone 
+				positiveButton.setOnClickListener(new OnClickListener()
+				{
+					@Override
+					public void onClick(View arg0)
+					{
+						dialog.dismiss();
+					}
+				});
+				dialog.show();
 
 			}
 
@@ -207,10 +262,10 @@ public class NewMainActivity extends Activity
 		positiveButton.setText("Ok");
 
 		// setta informazioni del profilo sulla dialog
-		if(idProfile!=12){	
+		if (idProfile != 12)
+		{
 			text.setText(setProfileInformation(idProfile));
-		}
-		else
+		} else
 			text.setText(testProfile.toString());
 		// listener per la chiusura della dialog
 		positiveButton.setOnClickListener(new OnClickListener()
@@ -229,7 +284,7 @@ public class NewMainActivity extends Activity
 	 * input.
 	 * 
 	 * @param id
-	 *  		  id del profilo da visualizzare, corrisponde alla posizione in
+	 *            id del profilo da visualizzare, corrisponde alla posizione in
 	 *            lista
 	 * @return un oggetto di tipo String contenente i dettagli del profilo, in
 	 *         modo che essi possano essere visualizzati nella dialog relativa
@@ -244,11 +299,11 @@ public class NewMainActivity extends Activity
 			CallRestService callRestService = new CallRestService();
 			responseJsonString = callRestService.callRestServiceForProfile(id);
 
-		} 
-		catch (ClientProtocolException e){
+		} catch (ClientProtocolException e)
+		{
 			e.printStackTrace();
-		} 
-		catch (IOException e){
+		} catch (IOException e)
+		{
 			e.printStackTrace();
 		}
 		return responseJsonString;

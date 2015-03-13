@@ -6,7 +6,6 @@
  */
 package com.webscrapingclient.presentation;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,7 +38,6 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.TextView;
 
-
 /**
  * @author Vanessa
  *
@@ -47,121 +45,79 @@ import android.widget.TextView;
 public class SplashScreenActivity extends Activity
 {
 	// Splash screen timer
-    private static int TIME_OUT = 3000;
-    private MapListProfiles profilesList;
-    private String tag = "SplashScreenActivity";
-	
-	
-	 @Override
-	    protected void onCreate(Bundle savedInstanceState) {
-	        super.onCreate(savedInstanceState);
-	        setContentView(R.layout.splash_screen);
-	        
-	    	
-	    	//mostra una schermata di presentazione dell'applicazione per 3 secondi
-	        new Handler().postDelayed(new Runnable() {   
-	        	
-	            @Override
-	            public void run() {
-	               
-	            	try
-					{
-	            		CallRestService callRestService = new CallRestService();
-	            		profilesList = callRestService.callRestServiceForListProfiles();
-					} catch (ClientProtocolException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-	            	
-	            	
-	            	//passaggio all'activity successiva dopo la scadenza del timer
-	                Intent i = new Intent(SplashScreenActivity.this, NewMainActivity.class);
-	                i.putExtra("profilesList", profilesList);
-	                startActivity(i);
-	 
-	                finish();
-	            }
-	        }, TIME_OUT);
-	        
-	        
-	        /*
-	         * terminati i 3 secondi richiama i servizi REST per ottenere la lista dei profili
-	         * mostrando per tutto il tempo di recupero dei dati una progress dialog
-	         */
-//	     final ProgressDialog progress = new ProgressDialog(SplashScreenActivity.this);
-//   		 progress.requestWindowFeature(Window.FEATURE_PROGRESS);
-//   		 progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//   		 progress.show();
-//   		 progress.setContentView(R.layout.custom_pd);
-//   		 progress.setTitle(null);
-//   		 TextView text = (TextView) progress.findViewById(R.id.progress_msg);
-//   		 text.setText("Recupero profili in corso..");
-//   		 progress.setIndeterminate(true);
-//   		 progress.setCancelable(false);
+	private static int TIME_OUT = 3000;
+	private MapListProfiles profilesList;
+	private String tag = "SplashScreenActivity";
 
-   		 
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		System.out.println("onCreate");
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.splash_screen);
 
-//   		 new Thread(new Runnable() {
-//   			 public void run() {
-//   				 
-//   				 //TODO richiama il servizio
-//   				 try
-//				{
-//					callRestService();
-//				} catch (ClientProtocolException e)
-//				{
-//					Log.v(tag, "ClientProtocolException");
-//					e.printStackTrace();
-//				} catch (IOException e)
-//				{
-//					Log.v(tag, "IOException");
-//					e.printStackTrace();
-//				}
-//			 
-//   				 progress.cancel();
-//   			 }
-//
-//
-//   		 }).start();
-//	        
-	        
-	    }
+		Handler handler = new Handler();
+		handler.postDelayed(new Runnable()
+		{
+			@Override
+			public void run()
+			{
 
-//		/**
-//		 * Richiama il servizio rest utilizzando un client Apache Http
-//		 * per ottenere la lista dei profili in formato JSON
-//		 * 
-//		 * @throws ClientProtocolException
-//		 * @throws IOException
-//		 */
-//		private void callRestService() throws ClientProtocolException, IOException
-//		{
-//			// TODO Auto-generated method stub
-//			String urlString = "http://"+"";
-//			
-//			HttpClient client = new DefaultHttpClient();
-//	        HttpGet request = new HttpGet(urlString);
-//	        HttpResponse response = client.execute(request);
-//	        
-//	        BufferedReader rd = new BufferedReader (new InputStreamReader(response.getEntity().getContent()));
-//	        
-//	        //stampa a video
-//	        String line = "";
-//	        while ((line = rd.readLine()) != null) {
-//	          System.out.println(line);
-//	        }
-//	        
-//	        //conversione in oggetto di tipo Profile
-//	        Gson gson = new Gson();
-//	        gson.fromJson(rd, Profile.class);
-//	        
-//		}
-	 
+				startApplication();
 
-	
+			}
+
+		}, 3000);
+
+	}
+
+	private void startApplication()
+	{
+		// TODO Auto-generated method stub
+		new Handler().postDelayed(new Runnable()
+		{
+			public void run()
+			{
+
+				final ProgressDialog progress = new ProgressDialog(SplashScreenActivity.this);
+
+				progress.requestWindowFeature(Window.FEATURE_PROGRESS);
+				progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				progress.show();
+				progress.setContentView(R.layout.custom_pd);
+				progress.setTitle(null);
+				TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+				text.setText("Recupero profili in corso..");
+				progress.setIndeterminate(true);
+				progress.setCancelable(false);
+
+				// TODO richiama il servizio
+				try
+				{
+
+					CallRestService callRestService = new CallRestService();
+					profilesList = callRestService.callRestServiceForListProfiles();
+
+				} catch (ClientProtocolException e)
+				{
+					Log.v(tag, "ClientProtocolException");
+					e.printStackTrace();
+				} catch (IOException e)
+				{
+					Log.v(tag, "IOException");
+					e.printStackTrace();
+				}
+
+				// passaggio all'activity successiva dopo la scadenza del timer
+				Intent i = new Intent(SplashScreenActivity.this, NewMainActivity.class);
+				i.putExtra("profilesList", profilesList);
+				progress.cancel();
+				startActivity(i);
+
+				finish();
+			}
+
+		}, TIME_OUT);
+	}
+
 }

@@ -13,10 +13,12 @@ import com.webscrapingclient.restservice.CallRestService;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Process;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -37,19 +39,19 @@ public class PoiDetailsActivity extends Activity
 	private ImageView logo;
 	private Dialog dialog;
 	private boolean isHotel = false;
-	private Button btn_detailsRating, btn_next;
+	private Button btn_detailsRating, btn_next, btn_previous;
 	private RatingBar hotelRatingBar;
 	private TextView name, address, contacts, rating, reviews, avgPrice, cuisineDetails, stars, policies, services, policiesTitle;
 	private int indexList;
 	private CallRestService poiRestService;
 	private OrderedListMap poiList;
+	private ProgressDialog progress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.details_activity);
-
 		/*
 		 * controlla se la ricerca è basata su hotel o ristoranti, recuperando
 		 * il flag booleano inviato insieme all'intent dall'activity precedente
@@ -85,6 +87,11 @@ public class PoiDetailsActivity extends Activity
 		// bottoni
 		btn_detailsRating = (Button) findViewById(R.id.button3);
 		btn_next = (Button) findViewById(R.id.button4);
+		btn_previous = (Button) findViewById(R.id.buttonPrev);
+		System.out.println("indexlist vale "+indexList);
+		if(indexList==0)
+			btn_previous.setVisibility(View.INVISIBLE);
+		
 		int sizePoiList = poiList.getOrdered_restaurants_ids_list().size();
 		System.out.println("IndexList = " + indexList + "sizePoiList = "+sizePoiList);
 		if(sizePoiList -1 == indexList){
@@ -139,31 +146,79 @@ public class PoiDetailsActivity extends Activity
 			}
 		});
 
+		//bottone per il passaggio al poi successivo
 		btn_next.setOnClickListener(new OnClickListener()
 		{
-
-
+			
+			
 			@Override
 			public void onClick(View v)
 			{
 				/*
 				 */
+				progress = new ProgressDialog(PoiDetailsActivity.this);
+				
+				progress.requestWindowFeature(Window.FEATURE_PROGRESS);
+				progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				progress.show();
+				progress.setContentView(R.layout.custom_pd);
+				progress.setTitle(null);
+				TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+				text.setText("Recupero in corso..");
+				progress.setIndeterminate(true);
+				progress.setCancelable(false);
+
+				
 				Intent intent = new Intent(PoiDetailsActivity.this,PoiDetailsActivity.class);
 				intent.putExtra("indexList", indexList+1);
 				intent.putExtra("poiList", poiList);
 				startActivity(intent);
-
+				finish();
+				progress.cancel();
 			}
 		});
 
+		//bottone per il passaggio al poi precedente
+		btn_previous.setOnClickListener(new OnClickListener()
+		{
+			
+			@Override
+			public void onClick(View v)
+			{
+				
+				progress = new ProgressDialog(PoiDetailsActivity.this);
+				
+				progress.requestWindowFeature(Window.FEATURE_PROGRESS);
+				progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				progress.show();
+				progress.setContentView(R.layout.custom_pd);
+				progress.setTitle(null);
+				TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+				text.setText("Recupero in corso..");
+				progress.setIndeterminate(true);
+				progress.setCancelable(false);
+				
+				
+				Intent intent = new Intent(PoiDetailsActivity.this,PoiDetailsActivity.class);
+				intent.putExtra("indexList", indexList-1);
+				intent.putExtra("poiList", poiList);
+				startActivity(intent);
+				finish();
+				progress.cancel();
+				
+			}
+		});
+		
+		
 	}
 
 	@Override
 	public void onBackPressed()
 	{
 		super.onBackPressed();
-		Intent intent = new Intent(PoiDetailsActivity.this, NewMainActivity.class);
-		startActivity(intent);
+//		Intent intent = new Intent(PoiDetailsActivity.this, NewMainActivity.class);
+//		startActivity(intent);
+		Process.killProcess(Process.myPid()); 
 
 	}
 
