@@ -132,33 +132,7 @@ public class NewMainActivity extends Activity
 				}
 				Log.v("scelto hotel", " " + hotel_chosen);
 
-				// chiama l'API /scorci/poi/profile/id per ottenere la lista dei
-				// poi relativi
-				final ProgressDialog progress = new ProgressDialog(NewMainActivity.this);
-				choiceProfile = (Integer) spinner.getSelectedItem();
-				try
-				{
-					progress.requestWindowFeature(Window.FEATURE_PROGRESS);
-					progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-					progress.show();
-					progress.setContentView(R.layout.custom_pd);
-					progress.setTitle(null);
-					TextView text = (TextView) progress.findViewById(R.id.progress_msg);
-					text.setText("Recupero profili in corso..");
-					progress.setIndeterminate(true);
-					progress.setCancelable(false);
-					
-					
-					CallRestService callRestService = new CallRestService();
-					poiList = callRestService.callRestServiceForList(choiceProfile);
-				} catch (ClientProtocolException e)
-				{
-					e.printStackTrace();
-				} catch (IOException e)
-				{
 
-					e.printStackTrace();
-				}
 
 				/*
 				 * passa all'activity contenente la lista dei poi filtrati solo
@@ -167,9 +141,39 @@ public class NewMainActivity extends Activity
 				 */
 				if (!hotel_chosen)
 				{
+					
+					// chiama l'API /scorci/poi/profile/id per ottenere la lista dei
+					// poi relativi
+					final ProgressDialog progress = new ProgressDialog(NewMainActivity.this);
+					choiceProfile = (Integer) spinner.getSelectedItem();
+					try
+					{
+						progress.requestWindowFeature(Window.FEATURE_PROGRESS);
+						progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+						progress.show();
+						progress.setContentView(R.layout.custom_pd);
+						progress.setTitle(null);
+						TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+						text.setText("Recupero profili in corso..");
+						progress.setIndeterminate(true);
+						progress.setCancelable(false);
+						
+						
+						CallRestService callRestService = new CallRestService();
+						poiList = callRestService.callRestServiceForList(choiceProfile);
+					} catch (ClientProtocolException e)
+					{
+						e.printStackTrace();
+					} catch (IOException e)
+					{
+
+						e.printStackTrace();
+					}
+					
 					Intent intent = new Intent(NewMainActivity.this, PoiDetailsActivity.class);
 					intent.putExtra("typeChoice", hotel_chosen);
 					intent.putExtra("indexList", indexList);
+					intent.putExtra("profilesList", profilesList);
 					intent.putExtra("poiList", poiList);
 					startActivity(intent);
 					finish();
@@ -219,27 +223,7 @@ public class NewMainActivity extends Activity
 		super.onResume();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings)
-		{
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 
 	/**
 	 * Crea la dialog atta a contenere le informazioni del profilo selezionato
