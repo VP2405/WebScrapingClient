@@ -22,7 +22,7 @@ public class Position
 	@Override
 	public String toString()
 	{
-		return "Position [latitude=" + latitude + ", longitude=" + longitude + "]";
+		return "latitude: " + latitude + ", longitude:" + longitude;
 	}
 
 	public double getLatitude()

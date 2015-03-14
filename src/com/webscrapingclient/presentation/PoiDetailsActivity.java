@@ -20,7 +20,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Process;
+import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -40,14 +43,14 @@ import android.widget.TextView;
  * @author Vanessa
  *
  */
-public class PoiDetailsActivity extends Activity
+public class PoiDetailsActivity extends ActionBarActivity
 {
-	private ImageView logo;
+	private ImageView logo, policiesImageView;
 	private Dialog dialog;
 	private boolean isHotel = false;
 	private Button btn_detailsRating, btn_next, btn_previous, btn_home;
 	private RatingBar hotelRatingBar;
-	private TextView name, address, contacts, website,email,rating, reviews, avgPrice, cuisineDetails, stars, policies, services, policiesTitle;
+	private TextView name, address, contacts, website, email, rating, reviews, avgPrice, cuisineDetails, stars, policies, services, policiesTitle;
 	private int indexList;
 	private MapListProfiles profilesList;
 	private CallRestService poiRestService;
@@ -69,7 +72,7 @@ public class PoiDetailsActivity extends Activity
 		poiList = intent.getExtras().getParcelable("poiList");
 
 		profilesList = intent.getExtras().getParcelable("profilesList");
-
+		System.out.println("Poidetails, profilelist: " + profilesList);
 		// recupero viste e settaggio informazioni
 		logo = (ImageView) findViewById(R.id.imageView1);
 
@@ -77,7 +80,7 @@ public class PoiDetailsActivity extends Activity
 		if (isHotel)
 			logo.setBackgroundResource(R.drawable.hotel);
 		else
-			logo.setBackgroundResource(R.drawable.rest);
+			logo.setBackgroundResource(R.drawable.restaurant);
 
 		// view relative ai dettagli del poi
 		name = (TextView) findViewById(R.id.textView1);
@@ -93,14 +96,15 @@ public class PoiDetailsActivity extends Activity
 		hotelRatingBar = (RatingBar) findViewById(R.id.ratingBar1);
 		services = (TextView) findViewById(R.id.textView11);
 		policiesTitle = (TextView) findViewById(R.id.textView12);
+		policiesImageView = (ImageView) findViewById(R.id.imageViewPolicies);
 		policies = (TextView) findViewById(R.id.textView13);
 
 		// bottoni
 		btn_detailsRating = (Button) findViewById(R.id.button3);
 		btn_next = (Button) findViewById(R.id.button4);
 		btn_previous = (Button) findViewById(R.id.buttonPrev);
-		btn_home = (Button)findViewById(R.id.buttonHome);
-		
+		btn_home = (Button) findViewById(R.id.buttonHome);
+
 		System.out.println("indexlist vale " + indexList);
 		if (indexList == 0)
 			btn_previous.setVisibility(View.INVISIBLE);
@@ -123,6 +127,7 @@ public class PoiDetailsActivity extends Activity
 			stars.setVisibility(View.INVISIBLE);
 			hotelRatingBar.setVisibility(View.INVISIBLE);
 			policiesTitle.setVisibility(View.INVISIBLE);
+			policiesImageView.setVisibility(View.INVISIBLE);
 			policies.setVisibility(View.INVISIBLE);
 		}
 
@@ -145,7 +150,7 @@ public class PoiDetailsActivity extends Activity
 
 		PoiRestaurants restaurant = poiRestService.getRestaurant();
 
-		fillviews(restaurant);
+		fillViews(restaurant);
 
 		// listener bottone dettagli del rating
 		btn_detailsRating.setOnClickListener(new OnClickListener()
@@ -181,12 +186,24 @@ public class PoiDetailsActivity extends Activity
 				progress.setIndeterminate(true);
 				progress.setCancelable(false);
 
-				Intent intent = new Intent(PoiDetailsActivity.this, PoiDetailsActivity.class);
-				intent.putExtra("indexList", indexList + 1);
-				intent.putExtra("poiList", poiList);
-				startActivity(intent);
-				finish();
-				progress.cancel();
+				new Thread(new Runnable()
+				{
+
+					@Override
+					public void run()
+					{
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(PoiDetailsActivity.this, PoiDetailsActivity.class);
+						intent.putExtra("indexList", indexList + 1);
+						intent.putExtra("poiList", poiList);
+						intent.putExtra("profilesList", profilesList);
+						progress.cancel();
+						startActivity(intent);
+						finish();
+					}
+				}).start();
+				;
+
 			}
 		});
 
@@ -210,25 +227,58 @@ public class PoiDetailsActivity extends Activity
 				progress.setIndeterminate(true);
 				progress.setCancelable(false);
 
-				Intent intent = new Intent(PoiDetailsActivity.this, PoiDetailsActivity.class);
-				intent.putExtra("indexList", indexList - 1);
-				intent.putExtra("poiList", poiList);
-				startActivity(intent);
-				finish();
-				progress.cancel();
+				new Thread(new Runnable()
+				{
 
+					@Override
+					public void run()
+					{
+						Intent intent = new Intent(PoiDetailsActivity.this, PoiDetailsActivity.class);
+						intent.putExtra("indexList", indexList - 1);
+						intent.putExtra("poiList", poiList);
+						intent.putExtra("profilesList", profilesList);
+						startActivity(intent);
+						finish();
+						progress.cancel();
+					}
+				}).start();
 			}
 		});
-		
-		
+
 		btn_home.setOnClickListener(new OnClickListener()
 		{
-			
+
 			@Override
 			public void onClick(View v)
 			{
-				// TODO passare anche profilesList
-				
+
+				progress = new ProgressDialog(PoiDetailsActivity.this);
+
+				progress.requestWindowFeature(Window.FEATURE_PROGRESS);
+				progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				progress.show();
+				progress.setContentView(R.layout.custom_pd);
+				progress.setTitle(null);
+				TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+				text.setText("Recupero in corso..");
+				progress.setIndeterminate(true);
+				progress.setCancelable(false);
+
+				new Thread(new Runnable()
+				{
+
+					@Override
+					public void run()
+					{
+						// TODO passare anche profilesList
+						Intent intent = new Intent(PoiDetailsActivity.this, NewMainActivity.class);
+						intent.putExtra("profilesList", profilesList);
+						startActivity(intent);
+						finish();
+
+						progress.cancel();
+					}
+				}).start();
 			}
 		});
 
@@ -245,37 +295,37 @@ public class PoiDetailsActivity extends Activity
 
 	}
 
-	private void fillviews(PoiRestaurants restaurant)
+	private void fillViews(PoiRestaurants restaurant)
 	{
 
 		name.setText(restaurant.getMap().getRestaurant().getName());
 		address.setText(restaurant.getMap().getRestaurant().getPosition().getAddress() + " "
 				+ restaurant.getMap().getRestaurant().getPosition().getZipCode() + ", " + restaurant.getMap().getRestaurant().getPosition().getCity()
-				+ " " + "\nGeographical Coordinates :[" + restaurant.getMap().getRestaurant().getPosition().getLatitude() + " , "
-				+ restaurant.getMap().getRestaurant().getPosition().getLongitude() + "]");
+				+ " " + "\nGeographical Coordinates :(" + restaurant.getMap().getRestaurant().getPosition().getLatitude() + " , "
+				+ restaurant.getMap().getRestaurant().getPosition().getLongitude() + ")");
 
 		List<String> telephoneNumberString = trimTelephoneNumber(restaurant.getMap().getRestaurant().getContact().getTelephoneNumber());
-		
-		if(telephoneNumberString.isEmpty())
+
+		if (telephoneNumberString.isEmpty())
 			contacts.setVisibility(View.INVISIBLE);
 		else
-			contacts.setText("Telephone Number: " + telephoneNumberString);
-		
+			contacts.setText("Telephone Number: " + TextUtils.join("", telephoneNumberString));
+
 		website.setText(restaurant.getMap().getRestaurant().getContact().getWebsite());
 		email.setText(restaurant.getMap().getRestaurant().getContact().getEmail());
 		rating.setText("Rating: " + restaurant.getMap().getRestaurant().getRating().getValue());
 		reviews.setText("Reviews: " + restaurant.getMap().getRestaurant().getRating().getReview());
-		
+
 		if (!restaurant.getMap().getRestaurant().getAveragePrice().equals("0"))
 		{
 			avgPrice.setText("Average Price: " + restaurant.getMap().getRestaurant().getAveragePrice());
 		} else
 			avgPrice.setText("Average Price: N/A");
 
-		cuisineDetails.setText(restaurant.getMap().getRestaurant().getCookingType().toString());
+		cuisineDetails.setText(TextUtils.join("", restaurant.getMap().getRestaurant().getCookingType()));
 		List<com.webscrapingclient.json.map.poi.Service> listServices = restaurant.getMap().getRestaurant().getServices();
 		if (!listServices.isEmpty())
-			services.setText(listServices.toString());
+			services.setText(TextUtils.join("", listServices));
 		else
 			services.setText("");
 

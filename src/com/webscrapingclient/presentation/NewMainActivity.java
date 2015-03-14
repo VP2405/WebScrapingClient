@@ -68,9 +68,10 @@ public class NewMainActivity extends Activity
 		profilesList = intent.getExtras().getParcelable("profilesList");
 		System.out.println(profilesList.getAllProfilesIds());
 
-	//	testProfile = new CommercialProfile(12, 3, "Cinese", 3, 20.0, 20.0, new Position(41.855805, 12.6253663));
+		// testProfile = new CommercialProfile(12, 3, "Cinese", 3, 20.0, 20.0,
+		// new Position(41.855805, 12.6253663));
 		// recupero vista spinner per la scelta del profilo di test
-	//	profilesList.addProfileId(testProfile);
+		// profilesList.addProfileId(testProfile);
 		System.out.println(profilesList.getAllProfilesIds());
 
 		spinner = new Spinner(this);
@@ -132,8 +133,6 @@ public class NewMainActivity extends Activity
 				}
 				Log.v("scelto hotel", " " + hotel_chosen);
 
-
-
 				/*
 				 * passa all'activity contenente la lista dei poi filtrati solo
 				 * se si vogliono visualizzare i ristoranti, dato che gli hotel
@@ -141,13 +140,46 @@ public class NewMainActivity extends Activity
 				 */
 				if (!hotel_chosen)
 				{
-					
-					// chiama l'API /scorci/poi/profile/id per ottenere la lista dei
+
+					// chiama l'API /scorci/poi/profile/id per ottenere la lista
+					// dei
 					// poi relativi
 					final ProgressDialog progress = new ProgressDialog(NewMainActivity.this);
 					choiceProfile = (Integer) spinner.getSelectedItem();
-					try
+
+					
+
+					new Thread(new Runnable()
 					{
+
+						@Override
+						public void run()
+						{
+							try
+							{
+								CallRestService callRestService = new CallRestService();
+								poiList = callRestService.callRestServiceForList(choiceProfile);
+
+							} catch (ClientProtocolException e)
+							{
+								e.printStackTrace();
+								System.out.println("NewMainActivity, ClientProtocolException");
+								createAlertDialog();
+							} catch (IOException e)
+							{
+								System.out.println("NewMainActivity, IOexception");
+								createAlertDialog();
+								e.printStackTrace();
+							}
+						}
+					}).start();
+					
+					
+					//TODO ricontrollare questo codice
+					if (poiList != null)
+					{
+						System.out.println(poiList.toString());
+						System.out.println("faccio l'intent");
 						progress.requestWindowFeature(Window.FEATURE_PROGRESS);
 						progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 						progress.show();
@@ -158,29 +190,22 @@ public class NewMainActivity extends Activity
 						progress.setIndeterminate(true);
 						progress.setCancelable(false);
 						
+						Intent intent = new Intent(NewMainActivity.this, PoiDetailsActivity.class);
+						intent.putExtra("typeChoice", hotel_chosen);
+						intent.putExtra("indexList", indexList);
+						intent.putExtra("profilesList", profilesList);
+						intent.putExtra("poiList", poiList);
+						startActivity(intent);
+						finish();
+						progress.cancel();
+					} else
+					{
+						System.out.println("NewMainActivity, sono nell'else");
+						createAlertDialog();
+						//dialog.dismiss();
 						
-						CallRestService callRestService = new CallRestService();
-						poiList = callRestService.callRestServiceForList(choiceProfile);
-					} catch (ClientProtocolException e)
-					{
-						e.printStackTrace();
-					} catch (IOException e)
-					{
-
-						e.printStackTrace();
 					}
-					
-					Intent intent = new Intent(NewMainActivity.this, PoiDetailsActivity.class);
-					intent.putExtra("typeChoice", hotel_chosen);
-					intent.putExtra("indexList", indexList);
-					intent.putExtra("profilesList", profilesList);
-					intent.putExtra("poiList", poiList);
-					startActivity(intent);
-					finish();
-					progress.cancel();
 				}
-
-				// }
 
 			}
 
@@ -199,8 +224,8 @@ public class NewMainActivity extends Activity
 				text.setText("Cannot retrieve data for Hotels.\nPlease search only for Restaurants.");
 				Button positiveButton = (Button) dialog.findViewById(R.id.positive_button);
 				positiveButton.setText("Ok");
-				
-				//listener per il bottone 
+
+				// listener per il bottone
 				positiveButton.setOnClickListener(new OnClickListener()
 				{
 					@Override
@@ -222,8 +247,6 @@ public class NewMainActivity extends Activity
 	{
 		super.onResume();
 	}
-
-
 
 	/**
 	 * Crea la dialog atta a contenere le informazioni del profilo selezionato

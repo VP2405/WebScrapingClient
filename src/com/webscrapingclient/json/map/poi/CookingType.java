@@ -29,7 +29,7 @@ public class CookingType
 	@Override
 	public String toString()
 	{
-		return name;
+		return name +"\n";
 	}
 
 }

@@ -108,8 +108,8 @@ public class CommercialProfile
 	@Override
 	public String toString()
 	{
-		return " Profile ID =" + id + ",\n Miser=" + isMiser + ",\n Favourite Cuisine =" + favouriteCuisine + ",\n Demanding=" + isDemanding
-				+ ",\n Demanding Percentage =" + isDemandingPercentage + ",\n Miser Percentage =" + isMiserPercentage + ",\n Last Position ="
+		return " Profile ID = " + id + "\n Miser = " + isMiser + "\n Favourite Cuisine = " + favouriteCuisine + "\n Demanding = " + isDemanding
+				+ "\n Demanding Percentage = " + isDemandingPercentage + "\n Miser Percentage = " + isMiserPercentage + "\n Last Position = "
 				+ lastPosition;
 	}
 

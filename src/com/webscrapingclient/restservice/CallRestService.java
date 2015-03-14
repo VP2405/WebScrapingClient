@@ -23,7 +23,7 @@ import com.webscrapingclient.json.map.profile.Profile;
 
 public class CallRestService {
 
-	private static final String SERVER_ADDRESS = "http://10.200.253.81:8080/scorci/";
+	private static final String SERVER_ADDRESS = "http://192.168.1.102:5555/scorci/";
 	private static final String PROFILE = "profile/";
 	private static final String POI ="poi/";
 	
@@ -70,7 +70,7 @@ public class CallRestService {
 		String line = "";
 		while ((line = rd.readLine()) != null)
 		{
-			// System.out.println("JSON:"+line);
+			System.out.println("JSON:"+line);
 			sbBuilder.append(line);
 		}
 
@@ -106,7 +106,7 @@ public class CallRestService {
 		String line = "";
 		while ((line = rd.readLine()) != null)
 		{
-			// System.out.println("JSON:"+line);
+			System.out.println("JSON:"+line);
 			sbBuilder.append(line);
 		}
 

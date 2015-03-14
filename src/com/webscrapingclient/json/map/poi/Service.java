@@ -67,11 +67,11 @@ public class Service {
 	public String toString()
 	{
 		if(this.description != null){
-		String desc = String.format("Name: %s, Description: %s\n", this.name, this.description);
+		String desc = this.name + this.description+"\n";
 		return desc;
 		}
 		else {
-			String desc = String.format("Name: %s\n", this.name);
+			String desc = this.name +"\n";
 			return desc;
 		}
 	}

@@ -22,7 +22,15 @@ import android.os.Parcelable;
  */
 public class MapListProfiles implements Parcelable
 {
+
 	private ArrayList<Integer> all_profiles_ids;
+
+	
+	public MapListProfiles(ArrayList<Integer> all_profiles_ids)
+	{
+		super();
+		this.all_profiles_ids = all_profiles_ids;
+	}
 
 	public void addProfileId(CommercialProfile profile){
 		all_profiles_ids.add(profile.getId());
