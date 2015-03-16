@@ -88,7 +88,7 @@ public class NewSplashScreenActivity extends Activity
 		progress.setContentView(R.layout.custom_pd);
 		progress.setTitle(null);
 		TextView text = (TextView) progress.findViewById(R.id.progress_msg);
-		text.setText("Recupero dati in corso..");
+		text.setText("Retrieving data..");
 		progress.setIndeterminate(true);
 		progress.setCancelable(false);
 

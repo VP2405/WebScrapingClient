@@ -68,21 +68,10 @@ public class NewMainActivity extends Activity
 		profilesList = intent.getExtras().getParcelable("profilesList");
 		System.out.println(profilesList.getAllProfilesIds());
 
-		// testProfile = new CommercialProfile(12, 3, "Cinese", 3, 20.0, 20.0,
-		// new Position(41.855805, 12.6253663));
-		// recupero vista spinner per la scelta del profilo di test
-		// profilesList.addProfileId(testProfile);
 		System.out.println(profilesList.getAllProfilesIds());
 
 		spinner = new Spinner(this);
-		// itemNumber = (TextView)findViewById(R.id.textItemNUmber);
-
 		spinner = (Spinner) findViewById(R.id.spinner1);
-		// ArrayAdapter<Integer> spinnerAdapter = new
-		// ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item,
-		// profilesList.getAllProfilesIds());
-		// spinner.setAdapter(spinnerAdapter);
-
 		SpinnerItemAdapter spinnerAdapter = new SpinnerItemAdapter(NewMainActivity.this, R.layout.spinner_item, profilesList.getAllProfilesIds());
 		spinner.setAdapter(spinnerAdapter);
 
@@ -121,12 +110,23 @@ public class NewMainActivity extends Activity
 			public void onClick(View v)
 			{
 
+				final ProgressDialog progress = new ProgressDialog(NewMainActivity.this);
+				progress.requestWindowFeature(Window.FEATURE_PROGRESS);
+				progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				progress.show();
+				progress.setContentView(R.layout.custom_pd);
+				progress.setTitle(null);
+				TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+				text.setText("Recupero profili in corso..");
+				progress.setIndeterminate(true);
+				progress.setCancelable(false);
+
 				// controllo del tipo di Poi scelto
 				if (rbHotels.isChecked())
 				{
 					// flagPoi = 0;
 					hotel_chosen = true;
-					createAlertDialog();
+					createAlertDialog("Cannot retrieve data for Hotels.\nPlease search only for Restaurants.");
 				} else
 				{
 					hotel_chosen = false;
@@ -144,10 +144,8 @@ public class NewMainActivity extends Activity
 					// chiama l'API /scorci/poi/profile/id per ottenere la lista
 					// dei
 					// poi relativi
-					final ProgressDialog progress = new ProgressDialog(NewMainActivity.this);
-					choiceProfile = (Integer) spinner.getSelectedItem();
 
-					
+					choiceProfile = (Integer) spinner.getSelectedItem();
 
 					new Thread(new Runnable()
 					{
@@ -160,56 +158,40 @@ public class NewMainActivity extends Activity
 								CallRestService callRestService = new CallRestService();
 								poiList = callRestService.callRestServiceForList(choiceProfile);
 
+								System.out.println("Dopo il parsing, la lista dei poi è: " + poiList.getOrdered_restaurants_ids_list());
+
+								// se riesco a recuperare i dati dal server
+								// allora passo all'activity successiva
+								Intent intent = new Intent(NewMainActivity.this, PoiDetailsActivity.class);
+								intent.putExtra("typeChoice", hotel_chosen);
+								intent.putExtra("indexList", indexList);
+								intent.putExtra("profilesList", profilesList);
+								intent.putExtra("poiList", poiList);
+								startActivity(intent);
+								finish();
+								progress.cancel();
+
 							} catch (ClientProtocolException e)
 							{
 								e.printStackTrace();
-								System.out.println("NewMainActivity, ClientProtocolException");
-								createAlertDialog();
+								Log.v("NewMainActivity", "ClientProtocolException");
+								createAlertDialog("Cannot conclude the operation.\nProblems in protocol.");
 							} catch (IOException e)
 							{
-								System.out.println("NewMainActivity, IOexception");
-								createAlertDialog();
+								Log.v("NewMainActivity", "IOexception");
+								createAlertDialog("Cannot conclude the operation.");
 								e.printStackTrace();
 							}
 						}
 					}).start();
-					
-					
-					//TODO ricontrollare questo codice
-					if (poiList != null)
-					{
-						System.out.println(poiList.toString());
-						System.out.println("faccio l'intent");
-						progress.requestWindowFeature(Window.FEATURE_PROGRESS);
-						progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-						progress.show();
-						progress.setContentView(R.layout.custom_pd);
-						progress.setTitle(null);
-						TextView text = (TextView) progress.findViewById(R.id.progress_msg);
-						text.setText("Recupero profili in corso..");
-						progress.setIndeterminate(true);
-						progress.setCancelable(false);
-						
-						Intent intent = new Intent(NewMainActivity.this, PoiDetailsActivity.class);
-						intent.putExtra("typeChoice", hotel_chosen);
-						intent.putExtra("indexList", indexList);
-						intent.putExtra("profilesList", profilesList);
-						intent.putExtra("poiList", poiList);
-						startActivity(intent);
-						finish();
-						progress.cancel();
-					} else
-					{
-						System.out.println("NewMainActivity, sono nell'else");
-						createAlertDialog();
-						//dialog.dismiss();
-						
-					}
+
+					// TODO ricontrollare questo codice
+
 				}
 
 			}
 
-			private void createAlertDialog()
+			private void createAlertDialog(String msg)
 			{
 				// TODO Auto-generated method stub
 				dialog = new Dialog(NewMainActivity.this);
@@ -221,7 +203,7 @@ public class NewMainActivity extends Activity
 				TextView title_dialog = (TextView) dialog.findViewById(R.id.dialog_title);
 				title_dialog.setText("Warning");
 				TextView text = (TextView) dialog.findViewById(R.id.message);
-				text.setText("Cannot retrieve data for Hotels.\nPlease search only for Restaurants.");
+				text.setText(msg);
 				Button positiveButton = (Button) dialog.findViewById(R.id.positive_button);
 				positiveButton.setText("Ok");
 
