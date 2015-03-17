@@ -47,7 +47,6 @@ public class NewMainActivity extends Activity
 	private RadioGroup rGroupProfiles, rGroupTypes;
 	private RadioButton rbHotels, rbRestaurants;
 	private Button btn_profile1, startButton;
-	private TextView itemNumber;
 	private boolean hotel_chosen = false;
 	private int flagPoi; // vale 0 se viene scelto hotel, 1 se viene scelto
 							// ristoranti
@@ -110,17 +109,6 @@ public class NewMainActivity extends Activity
 			public void onClick(View v)
 			{
 
-				final ProgressDialog progress = new ProgressDialog(NewMainActivity.this);
-				progress.requestWindowFeature(Window.FEATURE_PROGRESS);
-				progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-				progress.show();
-				progress.setContentView(R.layout.custom_pd);
-				progress.setTitle(null);
-				TextView text = (TextView) progress.findViewById(R.id.progress_msg);
-				text.setText("Recupero profili in corso..");
-				progress.setIndeterminate(true);
-				progress.setCancelable(false);
-
 				// controllo del tipo di Poi scelto
 				if (rbHotels.isChecked())
 				{
@@ -144,6 +132,17 @@ public class NewMainActivity extends Activity
 					// chiama l'API /scorci/poi/profile/id per ottenere la lista
 					// dei
 					// poi relativi
+
+					final ProgressDialog progress = new ProgressDialog(NewMainActivity.this);
+					progress.requestWindowFeature(Window.FEATURE_PROGRESS);
+					progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+					progress.show();
+					progress.setContentView(R.layout.custom_pd);
+					progress.setTitle(null);
+					TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+					text.setText("Retrieving data..");
+					progress.setIndeterminate(true);
+					progress.setCancelable(false);
 
 					choiceProfile = (Integer) spinner.getSelectedItem();
 
@@ -185,15 +184,13 @@ public class NewMainActivity extends Activity
 						}
 					}).start();
 
-					// TODO ricontrollare questo codice
-
 				}
 
 			}
 
 			private void createAlertDialog(String msg)
 			{
-				// TODO Auto-generated method stub
+				
 				dialog = new Dialog(NewMainActivity.this);
 				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 				dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -290,9 +287,11 @@ public class NewMainActivity extends Activity
 
 		} catch (ClientProtocolException e)
 		{
+			// TODO
 			e.printStackTrace();
 		} catch (IOException e)
 		{
+			// TODO
 			e.printStackTrace();
 		}
 		return responseJsonString;

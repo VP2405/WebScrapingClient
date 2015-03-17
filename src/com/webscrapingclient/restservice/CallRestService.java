@@ -23,7 +23,7 @@ import com.webscrapingclient.json.map.profile.Profile;
 
 public class CallRestService {
 
-	private static final String SERVER_ADDRESS = "http://10.220.176.242:5555/scorci/";
+	private static final String SERVER_ADDRESS = "http://10.220.176.252:5555/scorci/";
 	private static final String PROFILE = "profile/";
 	private static final String POI ="poi/";
 	
