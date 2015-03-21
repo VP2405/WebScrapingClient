@@ -2,6 +2,13 @@ package com.webscrapingclient.json.map.poi;
 
 import java.util.List;
 
+/**
+ * Classe relativa ad un poi di tipo Ristorante e che lo identifica con le sue
+ * specifiche caratteristiche
+ * 
+ * @author Andrea
+ * 
+ */
 
 public class Restaurant {
 
@@ -19,11 +26,15 @@ public class Restaurant {
 	private Hotel linkedPoi;
 	private String genericRequest;
 
-	
+	public Restaurant(int id, String name, String opening_times,
+			Contact contact, Position position, List<Service> services,
+			List<Policy> policies, Rating rating, int id2, String name2,
+			String url, String openingTimes, Contact contact2,
+			Position position2, List<Service> services2,
+			List<Policy> policies2, Rating rating2, String averagePrice,
+			List<CookingType> cookingType, Hotel linkedPoi,
+			String genericRequest) {
 
-	public Restaurant(int id, String name, String opening_times, Contact contact, Position position, List<Service> services, List<Policy> policies, Rating rating, int id2, String name2, String url, String openingTimes, Contact contact2, Position position2, List<Service> services2, List<Policy> policies2, Rating rating2, String averagePrice, List<CookingType> cookingType, Hotel linkedPoi, String genericRequest)
-	{
-		
 		id = id2;
 		name = name2;
 		this.url = url;
@@ -41,6 +52,7 @@ public class Restaurant {
 
 	/**
 	 * Restituisce il prezzo medio
+	 * 
 	 * @return
 	 */
 	public String getAveragePrice() {
@@ -49,6 +61,7 @@ public class Restaurant {
 
 	/**
 	 * Restituisce la lista dei tipi di cucina
+	 * 
 	 * @return
 	 */
 	public List<CookingType> getCookingType() {
@@ -57,144 +70,121 @@ public class Restaurant {
 
 	/**
 	 * Restituisce l'hotel che contiene il ristorante
+	 * 
 	 * @return
 	 */
 	public Hotel getRestaurantHotel() {// gestire quando � null
 		return this.linkedPoi;
 	}
-	
+
 	/**
-	 * Imposta il prezzo medio 
+	 * Imposta il prezzo medio
+	 * 
 	 * @param ap
 	 */
 	public void setAveragePrice(String ap) {
 		this.averagePrice = ap;
 	}
-     
-     /**
-      *	Imposta h come hotel relativo al ristorante 
-      * @param h
-      */
-     public void setRestaurantHotel(Hotel h) {
-    	 this.linkedPoi = h;
-     }
 
-	public String getGenericRequest()
-	{
+	/**
+	 * Imposta h come hotel relativo al ristorante
+	 * 
+	 * @param h
+	 */
+	public void setRestaurantHotel(Hotel h) {
+		this.linkedPoi = h;
+	}
+
+	// metodi getter e setter
+	public String getGenericRequest() {
 		return genericRequest;
 	}
 
-	public void setGenericRequest(String genericRequest)
-	{
+	public void setGenericRequest(String genericRequest) {
 		this.genericRequest = genericRequest;
 	}
 
-
-	public List<Service> getServices()
-	{
+	public List<Service> getServices() {
 		return services;
 	}
 
-
-	public void setServices(List<Service> services)
-	{
+	public void setServices(List<Service> services) {
 		this.services = services;
 	}
 
-
-	public List<Policy> getPolicies()
-	{
+	public List<Policy> getPolicies() {
 		return policies;
 	}
 
-
-	public void setPolicies(List<Policy> policies)
-	{
+	public void setPolicies(List<Policy> policies) {
 		this.policies = policies;
 	}
-	
-	public int getId()
-	{
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(int id)
-	{
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getUrl()
-	{
+	public String getUrl() {
 		return url;
 	}
 
-	public void setUrl(String url)
-	{
+	public void setUrl(String url) {
 		this.url = url;
 	}
 
-	public String getOpeningTimes()
-	{
+	public String getOpeningTimes() {
 		return openingTimes;
 	}
 
-	public void setOpeningTimes(String openingTimes)
-	{
+	public void setOpeningTimes(String openingTimes) {
 		this.openingTimes = openingTimes;
 	}
 
-	public Contact getContact()
-	{
+	public Contact getContact() {
 		return contact;
 	}
 
-	public void setContact(Contact contact)
-	{
+	public void setContact(Contact contact) {
 		this.contact = contact;
 	}
 
-	public Position getPosition()
-	{
+	public Position getPosition() {
 		return position;
 	}
 
-	public void setPosition(Position position)
-	{
+	public void setPosition(Position position) {
 		this.position = position;
 	}
 
-	public Rating getRating()
-	{
+	public Rating getRating() {
 		return rating;
 	}
 
-	public void setRating(Rating rating)
-	{
+	public void setRating(Rating rating) {
 		this.rating = rating;
 	}
 
-	public Hotel getLinkedPoi()
-	{
+	public Hotel getLinkedPoi() {
 		return linkedPoi;
 	}
 
-	public void setLinkedPoi(Hotel linkedPoi)
-	{
+	public void setLinkedPoi(Hotel linkedPoi) {
 		this.linkedPoi = linkedPoi;
 	}
 
-	public void setCookingType(List<CookingType> cookingType)
-	{
+	public void setCookingType(List<CookingType> cookingType) {
 		this.cookingType = cookingType;
 	}
 

@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * Classe relativa ai contatti del Poi
- *
+ * 
  */
 public class Contact {
 
@@ -12,11 +12,10 @@ public class Contact {
 	private String website;
 	private String email;
 
-
 	public List<String> getTelephoneNumber() {
 		return this.telephoneNumber;
 	}
-	
+
 	/**
 	 * Restituisce il sito web del Poi
 	 * 
@@ -35,7 +34,7 @@ public class Contact {
 	public String getEmail() {
 		return this.email;
 	}
-	
+
 	/**
 	 * Aggiunge tn alla lista dei numeri di telefono dei contatti
 	 * 
@@ -44,7 +43,7 @@ public class Contact {
 	public void addTelephoneNumber(String tn) {
 		this.telephoneNumber.add(tn);
 	}
-	
+
 	/**
 	 * Imposta website come sito web di Contact
 	 * 
@@ -53,7 +52,7 @@ public class Contact {
 	public void setWebsite(String website) {
 		this.website = website;
 	}
-	
+
 	/**
 	 * Imposta email come mail di Contact
 	 * 
@@ -63,8 +62,4 @@ public class Contact {
 		this.email = email;
 	}
 
-
-
-	
-		
 }

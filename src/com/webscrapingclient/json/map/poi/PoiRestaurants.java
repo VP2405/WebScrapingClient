@@ -1,56 +1,52 @@
-/**
- * 
- */
 package com.webscrapingclient.json.map.poi;
 
 import android.R.integer;
 
 /**
+ * Classe esterna relativa al Json per i poi di tipo Restaurant
+ * 
  * @author Vanessa
  * 
- *         Classe esterna relativa al Json per i poi di tipo Restaurant
- *
  */
-public class PoiRestaurants
-{
+public class PoiRestaurants {
 	private int status;
 	private String description;
 	private MapRestaurant map;
 
-	public PoiRestaurants(int status, String description)
-	{
+	/**
+	 * Costruttore per la classe PoiRestaurants
+	 * 
+	 * @param status
+	 * @param description
+	 */
+	public PoiRestaurants(int status, String description) {
 		super();
 		this.status = status;
 		this.description = description;
 	}
 
-	public int getStatus()
-	{
+	// metodi getter e setter
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status)
-	{
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
-	public String getDescription()
-	{
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description)
-	{
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public MapRestaurant getMap()
-	{
+	public MapRestaurant getMap() {
 		return map;
 	}
 
-	public void setMap(MapRestaurant map)
-	{
+	public void setMap(MapRestaurant map) {
 		this.map = map;
 	}
 }

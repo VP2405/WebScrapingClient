@@ -1,10 +1,11 @@
 package com.webscrapingclient.json.map.poi;
 
 /**
- * Classe Position che rappresenta la posizione del Poi. Essa � formata dalle coordinate geografiche,dall'indirizzo,
- * dal codice postale e dalla citt�
+ * Classe Position che rappresenta la posizione del Poi. Essa � formata dalle
+ * coordinate geografiche,dall'indirizzo, dal codice postale e dalla citt�
+ * 
  * @author Andrea
- *
+ * 
  */
 public class Position {
 
@@ -24,6 +25,7 @@ public class Position {
 
 	/**
 	 * Costruttore per la classe Position
+	 * 
 	 * @param latitude
 	 * @param longitude
 	 * @param address
@@ -39,9 +41,10 @@ public class Position {
 		this.zipCode = zip_code;
 		this.city = city;
 	}
-	
+
 	/**
 	 * Restituisce la latitudine
+	 * 
 	 * @return
 	 */
 	public double getLatitude() {
@@ -50,6 +53,7 @@ public class Position {
 
 	/**
 	 * Imposta la latitudine
+	 * 
 	 * @param latitude
 	 */
 	public void setLatitude(double latitude) {
@@ -58,6 +62,7 @@ public class Position {
 
 	/**
 	 * Restituisce la longituidine
+	 * 
 	 * @return
 	 */
 	public double getLongitude() {
@@ -66,6 +71,7 @@ public class Position {
 
 	/**
 	 * Imposta la longituidne
+	 * 
 	 * @param longitude
 	 */
 	public void setLongitude(double longitude) {
@@ -74,6 +80,7 @@ public class Position {
 
 	/**
 	 * Restituisce l'indirizzo
+	 * 
 	 * @return
 	 */
 	public String getAddress() {
@@ -82,6 +89,7 @@ public class Position {
 
 	/**
 	 * Imposta l'indirizzo
+	 * 
 	 * @param address
 	 */
 	public void setAddress(String address) {
@@ -90,6 +98,7 @@ public class Position {
 
 	/**
 	 * Restituisce il codice postale
+	 * 
 	 * @return
 	 */
 	public String getZipCode() {
@@ -98,14 +107,16 @@ public class Position {
 
 	/**
 	 * Imposta il codice postale
+	 * 
 	 * @param zip_code
 	 */
 	public void setZipCode(String zip_code) {
 		this.zipCode = zip_code;
 	}
-	
+
 	/**
 	 * Restituisce la citt�
+	 * 
 	 * @return
 	 */
 	public String getCity() {
@@ -114,6 +125,7 @@ public class Position {
 
 	/**
 	 * Imposta la citt�
+	 * 
 	 * @param city
 	 */
 	public void setCity(String city) {
