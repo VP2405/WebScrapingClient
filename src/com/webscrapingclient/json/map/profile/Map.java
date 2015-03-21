@@ -4,21 +4,20 @@
 package com.webscrapingclient.json.map.profile;
 
 /**
- * @author Vanessa Prima nested class relativa al Json per il recupero del
- *         profilo utente
- *
+ * Prima nested class relativa al Json per il recupero del profilo utente
+ * 
+ * @author Vanessa
+ * 
  */
-public class Map
-{
+public class Map {
 	private CommercialProfile commercialprofile;
 
-	public CommercialProfile getCommercialProfile()
-	{
+	//metodi getter e setter
+	public CommercialProfile getCommercialProfile() {
 		return commercialprofile;
 	}
 
-	public void setCommercialProfile(CommercialProfile commercialProfile)
-	{
+	public void setCommercialProfile(CommercialProfile commercialProfile) {
 		this.commercialprofile = commercialProfile;
 	}
 

@@ -33,24 +33,21 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 /**
- * @author Vanessa Activity per la visualizzazione dei dettagli del poi
- *         corrente. La vista viene modificata a runtime, a partire dal layout
- *         definito in details_view, a seconda della tipologia di poi da
- *         mostrare
- *
- */
-/**
+ * Activity per la visualizzazione dei dettagli del poi corrente. La vista viene
+ * modificata a runtime, a partire dal layout definito in details_view, a
+ * seconda della tipologia di poi da mostrare
+ * 
  * @author Vanessa
- *
+ * 
  */
-public class PoiDetailsActivity extends ActionBarActivity
-{
+public class PoiDetailsActivity extends ActionBarActivity {
 	private ImageView logo, policiesImageView;
 	private Dialog dialog;
 	private boolean isHotel = false;
 	private Button btn_detailsRating, btn_next, btn_previous, btn_home;
 	private RatingBar hotelRatingBar;
-	private TextView name, address, contacts, website, email, rating, reviews, avgPrice, cuisineDetails, stars, policies, services, policiesTitle;
+	private TextView name, address, contacts, website, email, rating, reviews,
+			avgPrice, cuisineDetails, stars, policies, services, policiesTitle;
 	private int indexList;
 	private MapListProfiles profilesList;
 	private CallRestService poiRestService;
@@ -58,8 +55,7 @@ public class PoiDetailsActivity extends ActionBarActivity
 	private ProgressDialog progress;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.details_activity);
 		/*
@@ -110,9 +106,9 @@ public class PoiDetailsActivity extends ActionBarActivity
 			btn_previous.setVisibility(View.INVISIBLE);
 
 		int sizePoiList = poiList.getOrdered_restaurants_ids_list().size();
-		System.out.println("IndexList = " + indexList + "sizePoiList = " + sizePoiList);
-		if (sizePoiList - 1 == indexList)
-		{
+		System.out.println("IndexList = " + indexList + "sizePoiList = "
+				+ sizePoiList);
+		if (sizePoiList - 1 == indexList) {
 			System.out.println(sizePoiList + "=" + indexList);
 			btn_next.setVisibility(View.INVISIBLE);
 		}
@@ -121,8 +117,7 @@ public class PoiDetailsActivity extends ActionBarActivity
 		 * nascondere le view relative a: - bottone per i dettagli del rating -
 		 * numero di stelle - policies
 		 */
-		if (!isHotel)
-		{
+		if (!isHotel) {
 			btn_detailsRating.setVisibility(View.INVISIBLE);
 			stars.setVisibility(View.INVISIBLE);
 			hotelRatingBar.setVisibility(View.INVISIBLE);
@@ -132,18 +127,16 @@ public class PoiDetailsActivity extends ActionBarActivity
 		}
 
 		// riempimento dei vari campi con i dati del primo poi della lista
-		try
-		{
+		try {
 			System.out.println(poiList.getOrdered_restaurants_ids_list());
 			System.out.println("");
 			poiRestService = new CallRestService();
-			poiRestService.callRestServiceForPoi(poiList.getOrdered_restaurants_ids_list().get(indexList));
-		} catch (IllegalStateException e)
-		{
+			poiRestService.callRestServiceForPoi(poiList
+					.getOrdered_restaurants_ids_list().get(indexList));
+		} catch (IllegalStateException e) {
 
 			e.printStackTrace();
-		} catch (IOException e)
-		{
+		} catch (IOException e) {
 
 			e.printStackTrace();
 		}
@@ -153,12 +146,10 @@ public class PoiDetailsActivity extends ActionBarActivity
 		fillViews(restaurant);
 
 		// listener bottone dettagli del rating
-		btn_detailsRating.setOnClickListener(new OnClickListener()
-		{
+		btn_detailsRating.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				// apre una custom dialog con la lista dei rating per categoria
 				createDialog("Rating Details", null);
 
@@ -166,34 +157,33 @@ public class PoiDetailsActivity extends ActionBarActivity
 		});
 
 		// bottone per il passaggio al poi successivo
-		btn_next.setOnClickListener(new OnClickListener()
-		{
+		btn_next.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				/*
 				 */
 				progress = new ProgressDialog(PoiDetailsActivity.this);
 
 				progress.requestWindowFeature(Window.FEATURE_PROGRESS);
-				progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				progress.getWindow().setBackgroundDrawable(
+						new ColorDrawable(Color.TRANSPARENT));
 				progress.show();
 				progress.setContentView(R.layout.custom_pd);
 				progress.setTitle(null);
-				TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+				TextView text = (TextView) progress
+						.findViewById(R.id.progress_msg);
 				text.setText("Recupero in corso..");
 				progress.setIndeterminate(true);
 				progress.setCancelable(false);
 
-				new Thread(new Runnable()
-				{
+				new Thread(new Runnable() {
 
 					@Override
-					public void run()
-					{
+					public void run() {
 						// TODO Auto-generated method stub
-						Intent intent = new Intent(PoiDetailsActivity.this, PoiDetailsActivity.class);
+						Intent intent = new Intent(PoiDetailsActivity.this,
+								PoiDetailsActivity.class);
 						intent.putExtra("indexList", indexList + 1);
 						intent.putExtra("poiList", poiList);
 						intent.putExtra("profilesList", profilesList);
@@ -208,32 +198,31 @@ public class PoiDetailsActivity extends ActionBarActivity
 		});
 
 		// bottone per il passaggio al poi precedente
-		btn_previous.setOnClickListener(new OnClickListener()
-		{
+		btn_previous.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 
 				progress = new ProgressDialog(PoiDetailsActivity.this);
 
 				progress.requestWindowFeature(Window.FEATURE_PROGRESS);
-				progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				progress.getWindow().setBackgroundDrawable(
+						new ColorDrawable(Color.TRANSPARENT));
 				progress.show();
 				progress.setContentView(R.layout.custom_pd);
 				progress.setTitle(null);
-				TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+				TextView text = (TextView) progress
+						.findViewById(R.id.progress_msg);
 				text.setText("Recupero in corso..");
 				progress.setIndeterminate(true);
 				progress.setCancelable(false);
 
-				new Thread(new Runnable()
-				{
+				new Thread(new Runnable() {
 
 					@Override
-					public void run()
-					{
-						Intent intent = new Intent(PoiDetailsActivity.this, PoiDetailsActivity.class);
+					public void run() {
+						Intent intent = new Intent(PoiDetailsActivity.this,
+								PoiDetailsActivity.class);
 						intent.putExtra("indexList", indexList - 1);
 						intent.putExtra("poiList", poiList);
 						intent.putExtra("profilesList", profilesList);
@@ -245,33 +234,32 @@ public class PoiDetailsActivity extends ActionBarActivity
 			}
 		});
 
-		btn_home.setOnClickListener(new OnClickListener()
-		{
+		btn_home.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 
 				progress = new ProgressDialog(PoiDetailsActivity.this);
 
 				progress.requestWindowFeature(Window.FEATURE_PROGRESS);
-				progress.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				progress.getWindow().setBackgroundDrawable(
+						new ColorDrawable(Color.TRANSPARENT));
 				progress.show();
 				progress.setContentView(R.layout.custom_pd);
 				progress.setTitle(null);
-				TextView text = (TextView) progress.findViewById(R.id.progress_msg);
+				TextView text = (TextView) progress
+						.findViewById(R.id.progress_msg);
 				text.setText("Recupero in corso..");
 				progress.setIndeterminate(true);
 				progress.setCancelable(false);
 
-				new Thread(new Runnable()
-				{
+				new Thread(new Runnable() {
 
 					@Override
-					public void run()
-					{
+					public void run() {
 						// TODO passare anche profilesList
-						Intent intent = new Intent(PoiDetailsActivity.this, NewMainActivity.class);
+						Intent intent = new Intent(PoiDetailsActivity.this,
+								NewMainActivity.class);
 						intent.putExtra("profilesList", profilesList);
 						startActivity(intent);
 						finish();
@@ -285,8 +273,7 @@ public class PoiDetailsActivity extends ActionBarActivity
 	}
 
 	@Override
-	public void onBackPressed()
-	{
+	public void onBackPressed() {
 		super.onBackPressed();
 		// Intent intent = new Intent(PoiDetailsActivity.this,
 		// NewMainActivity.class);
@@ -295,41 +282,64 @@ public class PoiDetailsActivity extends ActionBarActivity
 
 	}
 
-	private void fillViews(PoiRestaurants restaurant)
-	{
+	/**
+	 * Riempie l'activity con i dettagli del poi
+	 * 
+	 * @param restaurant
+	 */
+	private void fillViews(PoiRestaurants restaurant) {
 
 		name.setText(restaurant.getMap().getRestaurant().getName());
-		address.setText(restaurant.getMap().getRestaurant().getPosition().getAddress() + " "
-				+ restaurant.getMap().getRestaurant().getPosition().getZipCode() + ", " + restaurant.getMap().getRestaurant().getPosition().getCity()
-				+ " " + "\nGeographical Coordinates :(" + restaurant.getMap().getRestaurant().getPosition().getLatitude() + " , "
-				+ restaurant.getMap().getRestaurant().getPosition().getLongitude() + ")");
+		address.setText(restaurant.getMap().getRestaurant().getPosition()
+				.getAddress()
+				+ " "
+				+ restaurant.getMap().getRestaurant().getPosition()
+						.getZipCode()
+				+ ", "
+				+ restaurant.getMap().getRestaurant().getPosition().getCity()
+				+ " "
+				+ "\nGeographical Coordinates :("
+				+ restaurant.getMap().getRestaurant().getPosition()
+						.getLatitude()
+				+ " , "
+				+ restaurant.getMap().getRestaurant().getPosition()
+						.getLongitude() + ")");
 
-		List<String> telephoneNumberString = trimTelephoneNumber(restaurant.getMap().getRestaurant().getContact().getTelephoneNumber());
+		List<String> telephoneNumberString = trimTelephoneNumber(restaurant
+				.getMap().getRestaurant().getContact().getTelephoneNumber());
 
 		if (telephoneNumberString.isEmpty())
 			contacts.setVisibility(View.INVISIBLE);
 		else
-			contacts.setText("Telephone Number: " + TextUtils.join("", telephoneNumberString));
+			contacts.setText("Telephone Number: "
+					+ TextUtils.join("", telephoneNumberString));
 
-		website.setText(restaurant.getMap().getRestaurant().getContact().getWebsite());
-		email.setText(restaurant.getMap().getRestaurant().getContact().getEmail());
-		rating.setText("Rating: " + restaurant.getMap().getRestaurant().getRating().getValue());
-		reviews.setText("Reviews: " + restaurant.getMap().getRestaurant().getRating().getReview());
+		website.setText(restaurant.getMap().getRestaurant().getContact()
+				.getWebsite());
+		email.setText(restaurant.getMap().getRestaurant().getContact()
+				.getEmail());
+		rating.setText("Rating: "
+				+ restaurant.getMap().getRestaurant().getRating().getValue());
+		reviews.setText("Reviews: "
+				+ restaurant.getMap().getRestaurant().getRating().getReview());
 
-		if (!restaurant.getMap().getRestaurant().getAveragePrice().equals("0"))
-		{
-			avgPrice.setText("Average Price: " + restaurant.getMap().getRestaurant().getAveragePrice());
+		if (!restaurant.getMap().getRestaurant().getAveragePrice().equals("0")) {
+			avgPrice.setText("Average Price: "
+					+ restaurant.getMap().getRestaurant().getAveragePrice());
 		} else
 			avgPrice.setText("Average Price: N/A");
 
-		cuisineDetails.setText(TextUtils.join("", restaurant.getMap().getRestaurant().getCookingType()));
-		List<com.webscrapingclient.json.map.poi.Service> listServices = restaurant.getMap().getRestaurant().getServices();
+		cuisineDetails.setText(TextUtils.join("", restaurant.getMap()
+				.getRestaurant().getCookingType()));
+		List<com.webscrapingclient.json.map.poi.Service> listServices = restaurant
+				.getMap().getRestaurant().getServices();
 		if (!listServices.isEmpty())
 			services.setText(TextUtils.join("", listServices));
 		else
 			services.setText("");
 
-		policies.setText(restaurant.getMap().getRestaurant().getPolicies().toString());
+		policies.setText(restaurant.getMap().getRestaurant().getPolicies()
+				.toString());
 
 	}
 
@@ -341,17 +351,14 @@ public class PoiDetailsActivity extends ActionBarActivity
 	 * @param telephoneNumber
 	 * @return lista dei numeri di telefono trimmati
 	 */
-	private List<String> trimTelephoneNumber(List<String> telephoneNumber)
-	{
+	private List<String> trimTelephoneNumber(List<String> telephoneNumber) {
 		List<String> newList = new ArrayList<String>();
 
 		// se la lista dei contatti telefonici non è vuota allora splitta le
 		// stringhe per recuperare i soli numeri di telefono
-		if (!telephoneNumber.isEmpty())
-		{
+		if (!telephoneNumber.isEmpty()) {
 
-			for (String item : telephoneNumber)
-			{
+			for (String item : telephoneNumber) {
 				String[] tokens = item.split(":");
 				newList.add(tokens[1].trim().toString());
 			}
@@ -362,34 +369,39 @@ public class PoiDetailsActivity extends ActionBarActivity
 	}
 
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		super.onResume();
 	}
 
-	private void createDialog(String title, String msgString)
-	{
+	/**
+	 * Metdodo che crea una dialog che mostra a schermo la stringa passata
+	 * 
+	 * @param title
+	 * @param msgString
+	 */
+	private void createDialog(String title, String msgString) {
 		dialog = new Dialog(PoiDetailsActivity.this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		dialog.getWindow().setBackgroundDrawable(
+				new ColorDrawable(Color.TRANSPARENT));
 		dialog.setContentView(R.layout.custom_dialog);
 
 		// recupera il layout e setta titolo e testo del bottone
-		TextView title_dialog = (TextView) dialog.findViewById(R.id.dialog_title);
+		TextView title_dialog = (TextView) dialog
+				.findViewById(R.id.dialog_title);
 		title_dialog.setText(title);
 		TextView text = (TextView) dialog.findViewById(R.id.message);
-		Button positiveButton = (Button) dialog.findViewById(R.id.positive_button);
+		Button positiveButton = (Button) dialog
+				.findViewById(R.id.positive_button);
 		positiveButton.setText("Ok");
 
 		// setta informazioni del profilo sulla dialog
 		text.setText(msgString);
 
-		positiveButton.setOnClickListener(new OnClickListener()
-		{
+		positiveButton.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View arg0)
-			{
+			public void onClick(View arg0) {
 
 				dialog.dismiss();
 			}

@@ -4,6 +4,7 @@
 package com.webscrapingclient.json.map.profile;
 
 /**
+ * Classe che gestisce la posizione dell'utente
  * @author Vanessa
  *
  */
@@ -25,6 +26,7 @@ public class Position
 		return "latitude: " + latitude + ", longitude:" + longitude;
 	}
 
+	//metodi getter e setter
 	public double getLatitude()
 	{
 		return latitude;
