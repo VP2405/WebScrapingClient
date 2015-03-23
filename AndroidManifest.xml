@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.webscrapingclient.presentation.NewSplashScreenActivity"
+            android:name="it.uniroma2.scorci.presentation.SplashScreen"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -27,11 +27,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.webscrapingclient.presentation.NewMainActivity"
+            android:name="it.uniroma2.scorci.presentation.MainActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.webscrapingclient.presentation.PoiDetailsActivity"
+            android:name="it.uniroma2.scorci.presentation.PoiDetailsActivity"
             android:screenOrientation="portrait" >
         </activity>
     </application>
