@@ -12,6 +12,7 @@ public class PoiContainer {
 	private int status;
 	private String description;
 	private PoiMap map;
+	private int request_id;
 
 	/**
 	 * Costruttore per la classe PoiRestaurants

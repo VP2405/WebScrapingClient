@@ -38,7 +38,7 @@ public class CallRestService
 {
 
 	// Indirizzo del server
-	private static final String SERVER_ADDRESS = "http://192.168.1.102:5555/scorci/";
+	private static final String SERVER_ADDRESS = "http://192.168.1.4:8080/scorci/";
 
 	// specifica delle API
 	private static final String PROFILE = "profile/";
