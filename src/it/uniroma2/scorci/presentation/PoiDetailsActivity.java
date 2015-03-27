@@ -6,7 +6,10 @@ package it.uniroma2.scorci.presentation;
 import it.uniroma2.scorci.json.map.listprofiles.ListProfilesMap;
 import it.uniroma2.scorci.json.map.orderedlist.OrderedListMap;
 import it.uniroma2.scorci.json.map.poi.CookingType;
+import it.uniroma2.scorci.json.map.poi.Hotel;
 import it.uniroma2.scorci.json.map.poi.PoiContainer;
+import it.uniroma2.scorci.json.map.poi.Policy;
+import it.uniroma2.scorci.json.map.poi.Service;
 import it.uniroma2.scorci.restservice.CallRestService;
 
 import java.io.IOException;
@@ -26,6 +29,7 @@ import android.os.Handler;
 import android.os.Process;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -44,6 +48,7 @@ import android.widget.TextView;
  */
 public class PoiDetailsActivity extends Activity
 {
+	
 	private ImageView		logo, policiesImageView;
 	private Dialog			dialog;
 	private boolean			isHotel	= false;
@@ -109,7 +114,12 @@ public class PoiDetailsActivity extends Activity
 		if (indexList == 0)
 			btn_previous.setVisibility(View.INVISIBLE);
 
-		int sizePoiList = poiList.getOrdered_restaurants_ids_list().size();
+		int sizePoiList;
+		if(!isHotel)
+			sizePoiList = poiList.getOrdered_restaurants_ids_list().size();
+		else
+			sizePoiList = poiList.getOrdered_hotels_ids_list().size();
+		
 		System.out.println("IndexList = " + indexList + "sizePoiList = " + sizePoiList);
 		if (sizePoiList - 1 == indexList)
 		{
@@ -130,14 +140,27 @@ public class PoiDetailsActivity extends Activity
 			policiesImageView.setVisibility(View.INVISIBLE);
 			policies.setVisibility(View.INVISIBLE);
 		}
+		else{
+			cuisineDetails.setVisibility(View.INVISIBLE);
+			avgPrice.setVisibility(View.INVISIBLE);
+		}
+			
 
 		// riempimento dei vari campi con i dati del primo poi della lista
 		try
 		{
-			System.out.println(poiList.getOrdered_restaurants_ids_list());
-			System.out.println("");
-			poiRestService = new CallRestService();
-			poiRestService.callRestServiceForPoi(poiList.getOrdered_restaurants_ids_list().get(indexList));
+			if(!isHotel){
+				Log.v("PoiDetailsActivity",""+ poiList.getOrdered_restaurants_ids_list());
+				
+				poiRestService = new CallRestService();
+				poiRestService.callRestServiceForPoi(poiList.getOrdered_restaurants_ids_list().get(indexList));
+			}	
+			else{
+				Log.v("PoiDetailsActivity",""+ poiList.getOrdered_hotels_ids_list());
+				
+				poiRestService = new CallRestService();
+				poiRestService.callRestServiceForPoi(poiList.getOrdered_hotels_ids_list().get(indexList));
+			}
 		} catch (IllegalStateException e)
 		{
 
@@ -148,10 +171,12 @@ public class PoiDetailsActivity extends Activity
 			e.printStackTrace();
 		}
 
-		PoiContainer restaurant = poiRestService.getRestaurant();
-
-		fillViews(restaurant);
-
+		PoiContainer pc = poiRestService.getPoiContainer();
+		if(!isHotel)
+			fillRestaurantsViews(pc);
+		else
+			fillHotelsView(pc);
+		
 		// listener bottone dettagli del rating
 		btn_detailsRating.setOnClickListener(new OnClickListener()
 		{
@@ -191,6 +216,7 @@ public class PoiDetailsActivity extends Activity
 						intent.putExtra("indexList", indexList + 1);
 						intent.putExtra("poiList", poiList);
 						intent.putExtra("profilesList", profilesList);
+						intent.putExtra("typeChoice", isHotel);
 						progress.cancel();
 						startActivity(intent);
 						finish();
@@ -221,6 +247,7 @@ public class PoiDetailsActivity extends Activity
 						intent.putExtra("indexList", indexList - 1);
 						intent.putExtra("poiList", poiList);
 						intent.putExtra("profilesList", profilesList);
+						intent.putExtra("typeChoice", isHotel);
 						startActivity(intent);
 						finish();
 						progress.cancel();
@@ -258,6 +285,7 @@ public class PoiDetailsActivity extends Activity
 
 	}
 
+
 	@Override
 	public void onBackPressed()
 	{
@@ -272,7 +300,7 @@ public class PoiDetailsActivity extends Activity
 	 * 
 	 * @param restaurant oggetto di tipo PoiRestaurant corrente
 	 */
-	private void fillViews(PoiContainer restaurant)
+	private void fillRestaurantsViews(PoiContainer restaurant)
 	{
 
 		name.setText(restaurant.getMap().getRestaurant().getName());
@@ -309,9 +337,47 @@ public class PoiDetailsActivity extends Activity
 			services.setText(TextUtils.join("", listServices));
 		else
 			services.setText("Not Available");
+		
+		//policies.setText(restaurant.getMap().getRestaurant().getPolicies().toString());
 
-		policies.setText(restaurant.getMap().getRestaurant().getPolicies().toString());
+	}
+	
+	private void fillHotelsView(PoiContainer hotel) {
+		
+		Hotel h = hotel.getMap().getHotel();
+		
+		name.setText(h.getName());
+		address.setText(h.getPosition().getAddress() + " "
+				+ h.getPosition().getZipCode() + ", " + h.getPosition().getCity()
+				+ " " + "\nGeographical Coordinates :(" + h.getPosition().getLatitude() + " , "
+				+ h.getPosition().getLongitude() + ")");
 
+		List<String> telephoneNumberString = trimTelephoneNumber(h.getContact().getTelephoneNumber());
+
+		if (telephoneNumberString.isEmpty())
+			contacts.setVisibility(View.INVISIBLE);
+		else
+			contacts.setText("Telephone Number: " + TextUtils.join("", telephoneNumberString));
+
+		website.setText(h.getContact().getWebsite());
+		email.setText(h.getContact().getEmail());
+		rating.setText("Rating: " + h.getRating().getValue());
+		reviews.setText("Reviews: " + h.getRating().getReview());
+		
+		hotelRatingBar.setRating((float) h.getStars());
+		
+		List<Service> listServices = h.getServices();
+		if (!listServices.isEmpty())
+			services.setText(TextUtils.join("", listServices));
+		else
+			services.setText("Not Available");
+		
+		List<Policy> listPolicies= h.getPolicies();
+		if (!listPolicies.isEmpty())
+			policies.setText(TextUtils.join("", listPolicies));
+		else
+			policies.setText("Not Available");
+		//policies.setText(h.getPolicies().toString());
 	}
 
 	/**

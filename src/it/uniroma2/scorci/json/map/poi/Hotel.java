@@ -11,9 +11,18 @@ import java.util.*;
 // TODO da modificare in base al JSON
 public class Hotel {
 
+	private int id;
+	private String name;
+	private String url;
+	private String openingTimes;
+	private Contact contact;
+	private Position position;
+	private List<Service> services;
+	private List<Policy> policies;
+	private Rating rating;
 	private int stars;
 	private List<Deal> deal;
-	private PoiRestaurant hotelRestaurant;
+	private Restaurant hotelRestaurant;
 
 	/**
 	 * Costruttore per la classe Hotel dove vengono passati tutti i parametri
@@ -32,7 +41,7 @@ public class Hotel {
 	 */
 	public Hotel(int id, String name, String opening_times, Contact contact,
 			Position position, List<Service> services, List<Policy> policies,
-			int stars, List<Deal> deal, PoiRestaurant hotel_restaurant,
+			int stars, List<Deal> deal, Restaurant hotel_restaurant,
 			Rating rating) {
 		this.stars = stars;
 		this.deal = deal;
@@ -46,7 +55,7 @@ public class Hotel {
 	 * @param deal
 	 * @param hotel_restaurant
 	 */
-	public Hotel(int stars, List<Deal> deal, PoiRestaurant hotel_restaurant) {
+	public Hotel(int stars, List<Deal> deal, Restaurant hotel_restaurant) {
 		super();
 		this.stars = stars;
 		this.deal = deal;
@@ -85,7 +94,7 @@ public class Hotel {
 	 * 
 	 * @return
 	 */
-	public PoiRestaurant getHotelRestaurant() {
+	public Restaurant getHotelRestaurant() {
 		return this.hotelRestaurant;
 	}
 
@@ -112,8 +121,79 @@ public class Hotel {
 	 * 
 	 * @param r
 	 */
-	public void setHotelRestaurant(PoiRestaurant r) {
+	public void setHotelRestaurant(Restaurant r) {
 		this.hotelRestaurant = r;
 	}
 
+	public List<Service> getServices() {
+		return services;
+	}
+
+	public void setServices(List<Service> services) {
+		this.services = services;
+	}
+
+	public List<Policy> getPolicies() {
+		return policies;
+	}
+
+	public void setPolicies(List<Policy> policies) {
+		this.policies = policies;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getOpeningTimes() {
+		return openingTimes;
+	}
+
+	public void setOpeningTimes(String openingTimes) {
+		this.openingTimes = openingTimes;
+	}
+
+	public Contact getContact() {
+		return contact;
+	}
+
+	public void setContact(Contact contact) {
+		this.contact = contact;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
+	public Rating getRating() {
+		return rating;
+	}
+
+	public void setRating(Rating rating) {
+		this.rating = rating;
+	}
 }

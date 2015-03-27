@@ -13,7 +13,6 @@ public class OrderedListContainer {
 	private int status;
 	private String description;
 	private OrderedListMap map;
-	private int request_id;
 
 	/**
 	 * Costruttore di default per la classe OrderedListJson

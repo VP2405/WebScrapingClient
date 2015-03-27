@@ -110,7 +110,7 @@ public class MainActivity extends Activity {
 				// controllo del tipo di Poi scelto
 				if (rbHotels.isChecked()) {
 					flagPoi = true;
-					createAlertDialog("Cannot retrieve data for Hotels.\nPlease search only for Restaurants.");
+					//createAlertDialog("Cannot retrieve data for Hotels.\nPlease search only for Restaurants.");
 				} else {
 					flagPoi = false;
 				}
@@ -121,7 +121,7 @@ public class MainActivity extends Activity {
 				 * se si vogliono visualizzare i ristoranti, dato che gli hotel
 				 * non sono recuperabili
 				 */
-				if (!flagPoi) {
+				//if (!flagPoi) {
 
 					// chiama l'API /scorci/poi/profile/id per ottenere la lista
 					// dei poi relativi al profilo scelto
@@ -181,7 +181,7 @@ public class MainActivity extends Activity {
 						}
 					}).start();
 
-				}
+				//}
 
 			}
 

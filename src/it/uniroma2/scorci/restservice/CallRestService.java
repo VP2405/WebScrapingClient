@@ -38,7 +38,7 @@ public class CallRestService
 {
 
 	// Indirizzo del server
-	private static final String SERVER_ADDRESS = "http://192.168.1.4:8080/scorci/";
+	private static final String SERVER_ADDRESS = "http://192.168.1.5:8080/scorci/";
 
 	// specifica delle API
 	private static final String PROFILE = "profile/";
@@ -46,7 +46,7 @@ public class CallRestService
 	
 	private static final String TAG = "CallRestService";
 
-	private PoiContainer restaurant;
+	private PoiContainer poiContainer;
 	private Gson gson;
 	private HttpClient client;
 
@@ -220,7 +220,7 @@ public class CallRestService
 		StringBuilder sbBuilder = this.retrieveJson(urlString);
 
 		// deserializzazione del Json ricevuto in un oggetto di tipo Restaurant
-		setRestaurant(gson.fromJson(sbBuilder.toString(), PoiContainer.class));
+		setPoiContainer(gson.fromJson(sbBuilder.toString(), PoiContainer.class));
 
 	}
 
@@ -229,9 +229,9 @@ public class CallRestService
 	 * 
 	 * @return
 	 */
-	public PoiContainer getRestaurant()
+	public PoiContainer getPoiContainer()
 	{
-		return restaurant;
+		return poiContainer;
 	}
 
 	/**
@@ -239,9 +239,9 @@ public class CallRestService
 	 * 
 	 * @param restaurant
 	 */
-	public void setRestaurant(PoiContainer restaurant)
+	public void setPoiContainer(PoiContainer pc)
 	{
-		this.restaurant = restaurant;
+		this.poiContainer = pc;
 	}
 
 }

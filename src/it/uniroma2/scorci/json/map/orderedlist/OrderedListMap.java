@@ -1,6 +1,6 @@
 package it.uniroma2.scorci.json.map.orderedlist;
 
-import it.uniroma2.scorci.json.map.poi.PoiRestaurant;
+import it.uniroma2.scorci.json.map.poi.Restaurant;
 
 import java.util.ArrayList;
 

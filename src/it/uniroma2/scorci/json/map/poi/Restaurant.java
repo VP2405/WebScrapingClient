@@ -10,7 +10,7 @@ import java.util.List;
  * 
  */
 
-public class PoiRestaurant {
+public class Restaurant {
 
 	private int id;
 	private String name;
@@ -26,7 +26,7 @@ public class PoiRestaurant {
 	private Hotel linkedPoi;
 	private String genericRequest;
 
-	public PoiRestaurant(int id, String name, String opening_times,
+	public Restaurant(int id, String name, String opening_times,
 			Contact contact, Position position, List<Service> services,
 			List<Policy> policies, Rating rating, int id2, String name2,
 			String url, String openingTimes, Contact contact2,

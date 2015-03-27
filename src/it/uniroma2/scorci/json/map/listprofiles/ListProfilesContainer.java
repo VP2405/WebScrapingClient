@@ -11,7 +11,6 @@ public class ListProfilesContainer {
 	private int status;
 	private String description;
 	private ListProfilesMap map;
-	private int request_id;
 
 	// metodi getter e setter
 	public int getStatus() {
@@ -36,14 +35,6 @@ public class ListProfilesContainer {
 
 	public void setMap(ListProfilesMap map) {
 		this.map = map;
-	}
-
-	public int getRequest_id() {
-		return request_id;
-	}
-
-	public void setRequest_id(int request_id) {
-		this.request_id = request_id;
 	}
 
 }

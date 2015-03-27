@@ -8,22 +8,34 @@ package it.uniroma2.scorci.json.map.poi;
  */
 public class PoiMap {
 
-	private PoiRestaurant restaurant;
+	private Restaurant restaurant;
+	private Hotel hotel;
+	public Hotel getHotel() {
+		return hotel;
+	}
+
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
+	}
 
 	/**
 	 * Costruttore che riceve il tipo Restaurant
 	 */
-	public PoiMap(PoiRestaurant restaurant) {
+	public PoiMap(Restaurant restaurant) {
 		super();
 		this.restaurant = restaurant;
 	}
 
+	public PoiMap(Hotel hotel) {
+		super();
+		this.hotel = hotel;
+	}
 	// metodi getter e setter
-	public PoiRestaurant getRestaurant() {
+	public Restaurant getRestaurant() {
 		return restaurant;
 	}
 
-	public void setRestaurant(PoiRestaurant restaurant) {
+	public void setRestaurant(Restaurant restaurant) {
 		this.restaurant = restaurant;
 	}
 

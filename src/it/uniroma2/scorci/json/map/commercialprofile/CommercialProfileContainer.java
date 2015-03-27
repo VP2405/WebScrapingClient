@@ -11,7 +11,6 @@ public class CommercialProfileContainer {
 	private int status;
 	private String description;
 	private CommercialProfileMap map;
-	private int request_id;
 
 	// metodi getter e setter riferiti ai campi privati della classe Profile
 	public int getStatus() {
