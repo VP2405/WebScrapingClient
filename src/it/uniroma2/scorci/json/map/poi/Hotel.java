@@ -19,7 +19,7 @@ public class Hotel {
 	private Position position;
 	private List<Service> services;
 	private List<Policy> policies;
-	private Rating rating;
+	private HotelRating rating;
 	private int stars;
 	private List<Deal> deal;
 	private Restaurant hotelRestaurant;
@@ -189,11 +189,11 @@ public class Hotel {
 		this.position = position;
 	}
 
-	public Rating getRating() {
+	public HotelRating getRating() {
 		return rating;
 	}
 
-	public void setRating(Rating rating) {
+	public void setRating(HotelRating rating) {
 		this.rating = rating;
 	}
 }

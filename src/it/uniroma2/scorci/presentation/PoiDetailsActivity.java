@@ -13,6 +13,8 @@ import it.uniroma2.scorci.json.map.poi.Service;
 import it.uniroma2.scorci.restservice.CallRestService;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +57,7 @@ public class PoiDetailsActivity extends Activity
 	private Button			btn_detailsRating, btn_next, btn_previous, btn_home;
 	private RatingBar		hotelRatingBar;
 	private TextView		name, address, contacts, website, email, rating, reviews, avgPrice, cuisineDetails, stars, policies, services,
-			policiesTitle;
+			policiesTitle, cuisinsTitle;
 	private int				indexList;
 	private ListProfilesMap	profilesList;
 	private CallRestService	poiRestService;
@@ -96,6 +98,7 @@ public class PoiDetailsActivity extends Activity
 		rating = (TextView) findViewById(R.id.textView5);
 		reviews = (TextView) findViewById(R.id.textView6);
 		avgPrice = (TextView) findViewById(R.id.textView2);
+		cuisinsTitle =(TextView) findViewById(R.id.textView7);
 		cuisineDetails = (TextView) findViewById(R.id.textView8);
 		stars = (TextView) findViewById(R.id.textView9);
 		hotelRatingBar = (RatingBar) findViewById(R.id.ratingBar1);
@@ -141,7 +144,6 @@ public class PoiDetailsActivity extends Activity
 			policies.setVisibility(View.INVISIBLE);
 		}
 		else{
-			cuisineDetails.setVisibility(View.INVISIBLE);
 			avgPrice.setVisibility(View.INVISIBLE);
 		}
 			
@@ -171,7 +173,7 @@ public class PoiDetailsActivity extends Activity
 			e.printStackTrace();
 		}
 
-		PoiContainer pc = poiRestService.getPoiContainer();
+		final PoiContainer pc = poiRestService.getPoiContainer();
 		if(!isHotel)
 			fillRestaurantsViews(pc);
 		else
@@ -185,7 +187,8 @@ public class PoiDetailsActivity extends Activity
 			public void onClick(View v)
 			{
 				// apre una custom dialog con la lista dei rating per categoria
-				createDialog("Rating Details", null);
+				String detailsString= pc.getMap().getHotel().getRating().toString();
+				createDialog("Rating Details", detailsString);
 
 			}
 		});
@@ -303,11 +306,14 @@ public class PoiDetailsActivity extends Activity
 	private void fillRestaurantsViews(PoiContainer restaurant)
 	{
 
+		NumberFormat formatter = new DecimalFormat("#0.00000");     
+		
+		
 		name.setText(restaurant.getMap().getRestaurant().getName());
 		address.setText(restaurant.getMap().getRestaurant().getPosition().getAddress() + " "
 				+ restaurant.getMap().getRestaurant().getPosition().getZipCode() + ", " + restaurant.getMap().getRestaurant().getPosition().getCity()
-				+ " " + "\nGeographical Coordinates :(" + restaurant.getMap().getRestaurant().getPosition().getLatitude() + " , "
-				+ restaurant.getMap().getRestaurant().getPosition().getLongitude() + ")");
+				+ " " + "\nGeographical Coordinates: (" + formatter.format(restaurant.getMap().getRestaurant().getPosition().getLatitude()) + " , "
+				+ formatter.format(restaurant.getMap().getRestaurant().getPosition().getLongitude()) + ")");
 
 		List<String> telephoneNumberString = trimTelephoneNumber(restaurant.getMap().getRestaurant().getContact().getTelephoneNumber());
 
@@ -344,13 +350,14 @@ public class PoiDetailsActivity extends Activity
 	
 	private void fillHotelsView(PoiContainer hotel) {
 		
+		NumberFormat formatter = new DecimalFormat("#0.00000"); 
 		Hotel h = hotel.getMap().getHotel();
 		
 		name.setText(h.getName());
 		address.setText(h.getPosition().getAddress() + " "
 				+ h.getPosition().getZipCode() + ", " + h.getPosition().getCity()
-				+ " " + "\nGeographical Coordinates :(" + h.getPosition().getLatitude() + " , "
-				+ h.getPosition().getLongitude() + ")");
+				+ " " + "\nGeographical Coordinates: (" + formatter.format(h.getPosition().getLatitude()) + " , "
+				+ formatter.format(h.getPosition().getLongitude()) + ")");
 
 		List<String> telephoneNumberString = trimTelephoneNumber(h.getContact().getTelephoneNumber());
 
@@ -363,6 +370,7 @@ public class PoiDetailsActivity extends Activity
 		email.setText(h.getContact().getEmail());
 		rating.setText("Rating: " + h.getRating().getValue());
 		reviews.setText("Reviews: " + h.getRating().getReview());
+		cuisineDetails.setText("Not Available");
 		
 		hotelRatingBar.setRating((float) h.getStars());
 		
@@ -376,7 +384,7 @@ public class PoiDetailsActivity extends Activity
 		if (!listPolicies.isEmpty())
 			policies.setText(TextUtils.join("", listPolicies));
 		else
-			policies.setText("Not Available");
+			policies.setText("Not Available\n");
 		//policies.setText(h.getPolicies().toString());
 	}
 
