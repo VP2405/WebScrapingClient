@@ -38,17 +38,17 @@ public class CallRestService
 {
 
 	// Indirizzo del server
-	private static final String SERVER_ADDRESS = "http://192.168.1.102:5555/scorci/";
+	private static final String	SERVER_ADDRESS	= "http://192.168.1.102:5555/scorci/";
 
 	// specifica delle API
-	private static final String PROFILE = "profile/";
-	private static final String POI = "poi/";
-	
-	private static final String TAG = "CallRestService";
+	private static final String	PROFILE			= "profile/";
+	private static final String	POI				= "poi/";
 
-	private PoiContainer poiContainer;
-	private Gson gson;
-	private HttpClient client;
+	private static final String	TAG				= "CallRestService";
+
+	private PoiContainer		poiContainer;
+	private Gson				gson;
+	private HttpClient			client;
 
 	/**
 	 * Costruttore di default per la classe CallRestService
@@ -65,7 +65,7 @@ public class CallRestService
 	}
 
 	/**
-	 * Metodo che serve ad inizializzare la connessione Http
+	 * Inizializza la connessione Http
 	 */
 	public void initializeConnection()
 	{
@@ -82,11 +82,10 @@ public class CallRestService
 	 * ricevuto in risposta alla richiesta di connessione all'indirizzo
 	 * specificato dal parametro urlString
 	 * 
-	 * @param urlString
-	 *            contiene l'url da cui è possibile interagire con il servizio
-	 *            RESTful opportuno
+	 * @param urlString contiene l'url da cui è possibile interagire con il
+	 * servizio RESTful opportuno
 	 * @return un oggetto di tipo StringBuilder contenente il JSON inviato in
-	 *         risposta dal server
+	 * risposta dal server
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
@@ -98,16 +97,7 @@ public class CallRestService
 
 		// invio richiesta
 		HttpResponse response = null;
-		try
-		{
-			response = client.execute(request);
-		} catch (ClientProtocolException e)
-		{
-			e.printStackTrace();
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		response = client.execute(request);
 
 		// recupera il json in risposta, salvandolo in un oggetto di tipo
 		// StringBuilder
@@ -128,8 +118,7 @@ public class CallRestService
 	 * Richiama il servizio REST fornito da scorci per recuperare il profilo
 	 * identificato da id
 	 * 
-	 * @param id
-	 *            id del profilo scelto
+	 * @param id id del profilo scelto
 	 * 
 	 * @throws ClientProtocolException
 	 * @throws IOException
@@ -156,7 +145,7 @@ public class CallRestService
 	 * Richiama il servizio REST fornito da scorci per recuperare la lista degli
 	 * id dei poi che rispecchiano il profilo
 	 * 
-	 * @param id	id del profilo per cui si intende recuperare la lista ordinata
+	 * @param id id del profilo per cui si intende recuperare la lista ordinata
 	 * @return
 	 * @throws ClientProtocolException
 	 * @throws IOException
@@ -225,7 +214,9 @@ public class CallRestService
 	}
 
 	/**
-	 * Restituisce il ristorante
+	 * Restituisce l'oggetto di tipo PoiContainer per il singolo PoI recuperato
+	 * a partire dal JSON ottenuto in risposta
+	 *
 	 * 
 	 * @return
 	 */
@@ -235,9 +226,10 @@ public class CallRestService
 	}
 
 	/**
-	 * Imposta il ristorante
+	 * Imposta i campi per l'oggetto di tipo PoiContainer con le informazioni
+	 * recuperate dal JSON
 	 * 
-	 * @param restaurant
+	 * @param pc
 	 */
 	public void setPoiContainer(PoiContainer pc)
 	{

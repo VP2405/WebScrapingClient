@@ -1,6 +1,5 @@
 package it.uniroma2.scorci.json.map.poi;
 
-import android.R.integer;
 
 /**
  * Classe esterna relativa al Json per i poi di tipo Restaurant

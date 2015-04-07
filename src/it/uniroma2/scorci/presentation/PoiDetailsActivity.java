@@ -27,9 +27,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Process;
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -50,14 +48,14 @@ import android.widget.TextView;
  */
 public class PoiDetailsActivity extends Activity
 {
-	
+
 	private ImageView		logo, policiesImageView;
 	private Dialog			dialog;
 	private boolean			isHotel	= false;
 	private Button			btn_detailsRating, btn_next, btn_previous, btn_home;
 	private RatingBar		hotelRatingBar;
 	private TextView		name, address, contacts, website, email, rating, reviews, avgPrice, cuisineDetails, stars, policies, services,
-			policiesTitle, cuisinsTitle;
+			policiesTitle;
 	private int				indexList;
 	private ListProfilesMap	profilesList;
 	private CallRestService	poiRestService;
@@ -80,16 +78,9 @@ public class PoiDetailsActivity extends Activity
 
 		profilesList = intent.getExtras().getParcelable("profilesList");
 		System.out.println("Poidetails, profilelist: " + profilesList);
+
 		// recupero viste e settaggio informazioni
 		logo = (ImageView) findViewById(R.id.imageView1);
-
-		// setta l'icona del PoI in base alla tipologia
-		if (isHotel)
-			logo.setBackgroundResource(R.drawable.hotel);
-		else
-			logo.setBackgroundResource(R.drawable.restaurant);
-
-		// view relative ai dettagli del poi
 		name = (TextView) findViewById(R.id.textView1);
 		address = (TextView) findViewById(R.id.textView4);
 		contacts = (TextView) findViewById(R.id.textView3);
@@ -98,7 +89,6 @@ public class PoiDetailsActivity extends Activity
 		rating = (TextView) findViewById(R.id.textView5);
 		reviews = (TextView) findViewById(R.id.textView6);
 		avgPrice = (TextView) findViewById(R.id.textView2);
-		cuisinsTitle =(TextView) findViewById(R.id.textView7);
 		cuisineDetails = (TextView) findViewById(R.id.textView8);
 		stars = (TextView) findViewById(R.id.textView9);
 		hotelRatingBar = (RatingBar) findViewById(R.id.ratingBar1);
@@ -107,23 +97,35 @@ public class PoiDetailsActivity extends Activity
 		policiesImageView = (ImageView) findViewById(R.id.imageViewPolicies);
 		policies = (TextView) findViewById(R.id.textView13);
 
-		// bottoni
 		btn_detailsRating = (Button) findViewById(R.id.button3);
 		btn_next = (Button) findViewById(R.id.button4);
 		btn_previous = (Button) findViewById(R.id.buttonPrev);
 		btn_home = (Button) findViewById(R.id.buttonHome);
 
-		System.out.println("indexlist vale " + indexList);
+		// setta l'icona del PoI in base alla tipologia
+		if (isHotel)
+			logo.setBackgroundResource(R.drawable.hotel);
+		else
+			logo.setBackgroundResource(R.drawable.restaurant);
+
+		/*
+		 * se si sta visualizzando il primo poi della lista, viene reso
+		 * invisibile il bottone per il passaggio al poi precedente
+		 */
 		if (indexList == 0)
 			btn_previous.setVisibility(View.INVISIBLE);
 
+		//recupera la dimensione dell'opportuna lista dei poi in base alla scelta effettuata dall'utente
 		int sizePoiList;
-		if(!isHotel)
+		if (!isHotel)
 			sizePoiList = poiList.getOrdered_restaurants_ids_list().size();
 		else
 			sizePoiList = poiList.getOrdered_hotels_ids_list().size();
-		
-		System.out.println("IndexList = " + indexList + "sizePoiList = " + sizePoiList);
+
+		/*
+		 * quando si arriva all'ultimo poi della lista, il bottone per il
+		 * passaggio al poi successivo viene nascosto
+		 */
 		if (sizePoiList - 1 == indexList)
 		{
 			System.out.println(sizePoiList + "=" + indexList);
@@ -142,24 +144,24 @@ public class PoiDetailsActivity extends Activity
 			policiesTitle.setVisibility(View.INVISIBLE);
 			policiesImageView.setVisibility(View.INVISIBLE);
 			policies.setVisibility(View.INVISIBLE);
-		}
-		else{
+		} else
+		{
 			avgPrice.setVisibility(View.INVISIBLE);
 		}
-			
 
 		// riempimento dei vari campi con i dati del primo poi della lista
 		try
 		{
-			if(!isHotel){
-				Log.v("PoiDetailsActivity",""+ poiList.getOrdered_restaurants_ids_list());
-				
+			if (!isHotel)
+			{
+				Log.v("PoiDetailsActivity", "" + poiList.getOrdered_restaurants_ids_list());
+
 				poiRestService = new CallRestService();
 				poiRestService.callRestServiceForPoi(poiList.getOrdered_restaurants_ids_list().get(indexList));
-			}	
-			else{
-				Log.v("PoiDetailsActivity",""+ poiList.getOrdered_hotels_ids_list());
-				
+			} else
+			{
+				Log.v("PoiDetailsActivity", "" + poiList.getOrdered_hotels_ids_list());
+
 				poiRestService = new CallRestService();
 				poiRestService.callRestServiceForPoi(poiList.getOrdered_hotels_ids_list().get(indexList));
 			}
@@ -167,19 +169,25 @@ public class PoiDetailsActivity extends Activity
 		{
 
 			e.printStackTrace();
+			createAlertDialog("Error while retrieving data. The application will be closed.");
 		} catch (IOException e)
 		{
 
 			e.printStackTrace();
+			createAlertDialog("Error while retrieving data. The application will be closed.");
 		}
 
 		final PoiContainer pc = poiRestService.getPoiContainer();
-		if(!isHotel)
+		if (!isHotel)
 			fillRestaurantsViews(pc);
 		else
 			fillHotelsView(pc);
-		
-		// listener bottone dettagli del rating
+
+		/*
+		 * Listeners
+		 */
+
+		//bottone per dettagli sul rating (hotel)
 		btn_detailsRating.setOnClickListener(new OnClickListener()
 		{
 
@@ -187,7 +195,7 @@ public class PoiDetailsActivity extends Activity
 			public void onClick(View v)
 			{
 				// apre una custom dialog con la lista dei rating per categoria
-				String detailsString= pc.getMap().getHotel().getRating().toString();
+				String detailsString = pc.getMap().getHotel().getRating().toString();
 				createDialog("Rating Details", detailsString);
 
 			}
@@ -200,8 +208,7 @@ public class PoiDetailsActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				/*
-				 */
+
 				progress = createProgressDialog("Retrieving data...");
 
 				new Thread(new Runnable()
@@ -259,6 +266,7 @@ public class PoiDetailsActivity extends Activity
 			}
 		});
 
+		//bottone per il ritorno alla MainActivity (home)
 		btn_home.setOnClickListener(new OnClickListener()
 		{
 
@@ -288,7 +296,6 @@ public class PoiDetailsActivity extends Activity
 
 	}
 
-
 	@Override
 	public void onBackPressed()
 	{
@@ -301,14 +308,13 @@ public class PoiDetailsActivity extends Activity
 	/**
 	 * Riempie le varie view dell'activity con i dettagli del poi corrente
 	 * 
-	 * @param restaurant oggetto di tipo PoiRestaurant corrente
+	 * @param restaurant oggetto di tipo PoiContainer corrente
 	 */
 	private void fillRestaurantsViews(PoiContainer restaurant)
 	{
 
-		NumberFormat formatter = new DecimalFormat("#0.00000");     
-		
-		
+		NumberFormat formatter = new DecimalFormat("#0.00000");
+
 		name.setText(restaurant.getMap().getRestaurant().getName());
 		address.setText(restaurant.getMap().getRestaurant().getPosition().getAddress() + " "
 				+ restaurant.getMap().getRestaurant().getPosition().getZipCode() + ", " + restaurant.getMap().getRestaurant().getPosition().getCity()
@@ -343,20 +349,26 @@ public class PoiDetailsActivity extends Activity
 			services.setText(TextUtils.join("", listServices));
 		else
 			services.setText("Not Available");
-		
+
 		//policies.setText(restaurant.getMap().getRestaurant().getPolicies().toString());
 
 	}
+
 	
-	private void fillHotelsView(PoiContainer hotel) {
-		
-		NumberFormat formatter = new DecimalFormat("#0.00000"); 
+	/**
+	 * Riempie le varie view dell'activity con i dettagli del poi corrente
+	 * 
+	 * @param hotel oggetto di tipo PoiContainer corrente
+	 */
+	private void fillHotelsView(PoiContainer hotel)
+	{
+
+		NumberFormat formatter = new DecimalFormat("#0.00000");
 		Hotel h = hotel.getMap().getHotel();
-		
+
 		name.setText(h.getName());
-		address.setText(h.getPosition().getAddress() + " "
-				+ h.getPosition().getZipCode() + ", " + h.getPosition().getCity()
-				+ " " + "\nGeographical Coordinates: (" + formatter.format(h.getPosition().getLatitude()) + " , "
+		address.setText(h.getPosition().getAddress() + " " + h.getPosition().getZipCode() + ", " + h.getPosition().getCity() + " "
+				+ "\nGeographical Coordinates: (" + formatter.format(h.getPosition().getLatitude()) + " , "
 				+ formatter.format(h.getPosition().getLongitude()) + ")");
 
 		List<String> telephoneNumberString = trimTelephoneNumber(h.getContact().getTelephoneNumber());
@@ -371,21 +383,20 @@ public class PoiDetailsActivity extends Activity
 		rating.setText("Rating: " + h.getRating().getValue());
 		reviews.setText("Reviews: " + h.getRating().getReview());
 		cuisineDetails.setText("Not Available");
-		
+
 		hotelRatingBar.setRating((float) h.getStars());
-		
+
 		List<Service> listServices = h.getServices();
 		if (!listServices.isEmpty())
 			services.setText(TextUtils.join("", listServices));
 		else
 			services.setText("Not Available");
-		
-		List<Policy> listPolicies= h.getPolicies();
+
+		List<Policy> listPolicies = h.getPolicies();
 		if (!listPolicies.isEmpty())
 			policies.setText(TextUtils.join("", listPolicies));
 		else
 			policies.setText("Not Available\n");
-		//policies.setText(h.getPolicies().toString());
 	}
 
 	/**
@@ -462,6 +473,7 @@ public class PoiDetailsActivity extends Activity
 		// mostra la dialog
 		dialog.show();
 	}
+	
 
 	private ProgressDialog createProgressDialog(String msg)
 	{
@@ -479,6 +491,44 @@ public class PoiDetailsActivity extends Activity
 		pd.setCancelable(false);
 
 		return pd;
+	}
+
+	/**
+	 * Crea un'alert dialog customizzata, per mostrare all'utente il messaggio
+	 * passato come argomento.
+	 * 
+	 * @param msg il messaggio da visualizzare
+	 */
+	protected void createAlertDialog(String msg)
+	{
+
+		dialog = new Dialog(PoiDetailsActivity.this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		dialog.setContentView(R.layout.custom_dialog);
+
+		// recupera il layout e setta titolo e testo del bottone
+		TextView title_dialog = (TextView) dialog.findViewById(R.id.dialog_title);
+		title_dialog.setText("Warning");
+		TextView text = (TextView) dialog.findViewById(R.id.message);
+		text.setText(msg);
+		Button positiveButton = (Button) dialog.findViewById(R.id.positive_button);
+		positiveButton.setText("Ok");
+
+		// listener per il bottone
+		positiveButton.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0)
+			{
+				//chiude l'applicazione
+				dialog.dismiss();
+				finish();
+				Process.killProcess(Process.myPid());
+			}
+		});
+		dialog.show();
+
 	}
 
 }
